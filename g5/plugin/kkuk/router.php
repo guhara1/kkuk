@@ -18,7 +18,12 @@ function kkuk_route($path) {
     $path = trim(parse_url((string)$path, PHP_URL_PATH) ?? '', '/');
 
     /* 정적 산출물 */
-    if ($path === 'sitemap.xml') { header('Content-Type: application/xml; charset=utf-8'); echo kkuk_sitemap_xml(); return true; }
+    if ($path === 'sitemap.xml') {
+        header('Content-Type: application/xml; charset=utf-8'); echo kkuk_sitemap_index_xml(); return true;
+    }
+    if (preg_match('#^sitemap-(core|gu|dong|shop)\.xml$#', $path, $m)) {
+        header('Content-Type: application/xml; charset=utf-8'); echo kkuk_sitemap_xml($m[1]); return true;
+    }
     if ($path === 'rss.xml')     { header('Content-Type: application/rss+xml; charset=utf-8'); echo kkuk_rss_xml();  return true; }
     if ($path === 'robots.txt')  { header('Content-Type: text/plain; charset=utf-8'); echo kkuk_robots_txt(); return true; }
 
@@ -27,6 +32,8 @@ function kkuk_route($path) {
 
     if (!$seg) {
         $html = kkuk_page_home();
+    } elseif ($seg[0] === 'sitemap' && count($seg) === 1) {
+        $html = kkuk_page_sitemap();
     } elseif ($seg[0] === 'search') {
         $html = kkuk_page_search($_GET['q'] ?? '');
     } elseif ($seg[0] === 'shop' && isset($seg[1])) {

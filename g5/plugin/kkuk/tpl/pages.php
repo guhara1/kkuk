@@ -59,6 +59,13 @@ function kkuk_page_home() {
     $picks = array_slice(kkuk_shop_sort($picks), 0, 6);
     $p['items'] = $picks;
 
+    /* 롱테일 앵커용 : 시도 + 등록 수 상위 행정구 */
+    $topicItems = [];
+    foreach ($sidos as $s2) $topicItems[] = [$s2['name'], $s2['url']];
+    $allGu = kkuk_gu_all();
+    uasort($allGu, fn($a, $b) => $b['shop_count'] <=> $a['shop_count']);
+    foreach (array_slice($allGu, 0, 18) as $g2) $topicItems[] = [$g2['label'], $g2['url']];
+
     ob_start();
     echo kkuk_doc_open($p);
     echo kkuk_header('');
@@ -85,6 +92,12 @@ function kkuk_page_home() {
     <section class="k-sect">
       <?= kkuk_shead('지역 선택', '시·도를 고른 뒤 행정구 → 대표 행정동 순서로 좁혀 보세요') ?>
       <div class="k-grid k-cols-3"><?= $cards ?></div>
+    </section>
+
+    <section class="k-sect">
+      <?= kkuk_shead('주제별로 바로 가기', '지역과 주제를 함께 골라 이동하세요') ?>
+      <?= kkuk_topic_links('서울 · 경기 · 인천 주요 지역', $topicItems, 'home-topic',
+            '지역 페이지 안의 해당 업종 목록으로 바로 들어갑니다.') ?>
     </section>
 
     <section class="k-sect">
@@ -145,7 +158,12 @@ function kkuk_page_sido($slug) {
 
     $p = ['type' => 'sido', 'title' => $title, 'desc' => $desc, 'url' => $s['url'],
           'area' => $s['full'], 'sido_slug' => $slug, 'lat' => $s['lat'], 'lng' => $s['lng'],
-          'crumbs' => kkuk_crumbs('sido', ['sido' => $s]), 'faq' => $faq, 'items' => $picks];
+          'crumbs' => kkuk_crumbs('sido', ['sido' => $s]), 'faq' => $faq, 'items' => $picks,
+          'place' => [
+              'ptype' => 'AdministrativeArea', 'name' => $s['full'], 'region' => $s['full'],
+              'lat' => $s['lat'], 'lng' => $s['lng'],
+              'children' => array_map(fn($g) => ['name' => $g['label'], 'url' => $g['url']], $gus),
+          ]];
 
     $hero = kkuk_hero_svg([
         'seed' => 'sido:' . $slug, 'kicker' => $s['full'],
@@ -195,6 +213,12 @@ function kkuk_page_sido($slug) {
     </section>
 
     <section class="k-sect">
+      <?= kkuk_shead($s['name'] . ' 주제별 바로가기', '행정구와 주제를 묶어 정리했습니다') ?>
+      <?= kkuk_topic_links($s['name'] . ' 행정구',
+            array_map(fn($g) => [$g['label'], $g['url']], $gus), 'sido:' . $slug) ?>
+    </section>
+
+    <section class="k-sect">
       <?= kkuk_shead($s['name'] . ' 대표 등록 업소', '구별로 고르게 추출했습니다') ?>
       <?= kkuk_shop_grid($picks, true, 3) ?>
     </section>
@@ -240,7 +264,14 @@ function kkuk_page_gu($key) {
     $p = ['type' => 'gu', 'title' => $title, 'desc' => $desc, 'url' => $g['url'],
           'area' => $g['area'], 'sido_slug' => $g['sido'], 'lat' => $g['lat'], 'lng' => $g['lng'],
           'crumbs' => kkuk_crumbs('gu', ['sido' => $s, 'gu' => $g]),
-          'faq' => $faq, 'items' => array_slice($shops, 0, 20)];
+          'faq' => $faq, 'items' => array_slice($shops, 0, 20),
+          'place' => [
+              'ptype' => 'AdministrativeArea', 'name' => $g['area'],
+              'region' => $g['sido_name'], 'locality' => $g['label'],
+              'lat' => $g['lat'], 'lng' => $g['lng'],
+              'parent' => ['name' => $s['full'], 'url' => $s['url']],
+              'children' => array_map(fn($d) => ['name' => $d['name'], 'url' => $d['url']], $dongs),
+          ]];
 
     $hero = kkuk_hero_svg([
         'seed' => $key, 'kicker' => $g['sido_name'] . ' · ' . $g['label'],
@@ -302,6 +333,7 @@ function kkuk_page_gu($key) {
       <?= kkuk_shead($g['label'] . ' 행정동', '번호로 나뉘는 행정동(○○1동·2동)은 대표 1곳으로 묶었습니다') ?>
       <?= kkuk_chips($dchips, '', true) ?>
       <div class="k-grid k-cols-3 k-mt"><?= $dcards ?></div>
+      <div class="k-mt"><?= kkuk_topic_facets($g['name'], $g['url'], 'gu:' . $key) ?></div>
     </section>
 
     <div class="k-split k-sect">
@@ -315,6 +347,7 @@ function kkuk_page_gu($key) {
 
         <section class="k-sect">
           <?= kkuk_shead($g['label'] . ' 지역 가이드', '이 지역 기준으로만 정리한 내용입니다') ?>
+          <?= kkuk_article_toc($blocks) ?>
           <?= kkuk_article_html($blocks,
                 '<b>기준 안내</b> · 요금과 운영 시간은 업소별로 다르고 수시로 변동됩니다. 총액과 마지막 입장 시간은 전화 상담에서 확인하시는 편이 정확합니다. 출장마사지·홈타이 상담 ' . kkuk_tel_html() . '.') ?>
         </section>
@@ -345,7 +378,10 @@ function kkuk_page_gu($key) {
 
     <section class="k-sect">
       <?= kkuk_shead($g['sido_name'] . ' 다른 지역', '경계 생활권이라면 함께 확인해 보세요') ?>
-      <?= kkuk_links_block($g['sido_name'] . ' 행정구', $siblingLinks) ?>
+      <?= kkuk_topic_links($g['sido_name'] . ' 다른 행정구', $siblingLinks, 'gu-sib:' . $key) ?>
+      <div class="k-mt"><?= kkuk_topic_links($g['label'] . ' 행정동',
+            array_map(fn($d) => [$d['name'], $d['url']], $dongs), 'gu-dong:' . $key,
+            '동 이름과 주제를 묶어 해당 지역의 업종 목록으로 바로 이동합니다.') ?></div>
     </section>
   </div>
 </main>
@@ -387,7 +423,13 @@ function kkuk_page_dong($key) {
     $p = ['type' => 'dong', 'title' => $title, 'desc' => $desc, 'url' => $d['url'],
           'area' => $d['area'], 'sido_slug' => $d['sido'], 'lat' => $d['lat'], 'lng' => $d['lng'],
           'crumbs' => kkuk_crumbs('dong', ['sido' => $s, 'gu' => $g, 'dong' => $d]),
-          'faq' => $faq, 'items' => $shops];
+          'faq' => $faq, 'items' => $shops,
+          'place' => [
+              'ptype' => 'AdministrativeArea', 'name' => $d['area'],
+              'region' => $g['sido_name'], 'locality' => $g['label'],
+              'lat' => $d['lat'], 'lng' => $d['lng'],
+              'parent' => ['name' => $g['area'], 'url' => $g['url']],
+          ]];
 
     $hero = kkuk_hero_svg([
         'seed' => $key, 'kicker' => $g['label'] . ' · ' . kkuk_kind_label($d['kind']),
@@ -445,10 +487,12 @@ function kkuk_page_dong($key) {
           <?= kkuk_filter_bar($shops) ?>
           <div class="k-mt"><?= kkuk_shop_grid($shops, false, 2) ?></div>
           <div class="k-empty k-mt" data-kkuk-empty hidden>해당 업종으로 등록된 업소가 없습니다.</div>
+          <div class="k-mt"><?= kkuk_topic_facets($d['name'], $d['url'], 'dong:' . $key) ?></div>
         </section>
 
         <section class="k-sect">
           <?= kkuk_shead($d['name'] . ' 지역 가이드', '이 동네 기준으로만 정리한 내용입니다') ?>
+          <?= kkuk_article_toc($blocks) ?>
           <?= kkuk_article_html($blocks,
                 '<b>기준 안내</b> · 출장마사지와 홈타이는 이동이 포함되므로 도착 예상 시각을 먼저 확인하시는 편이 좋습니다. 상담 ' . kkuk_tel_html() . '.') ?>
         </section>
@@ -481,7 +525,11 @@ function kkuk_page_dong($key) {
     </div>
 
     <section class="k-sect">
-      <?= kkuk_links_block($g['label'] . ' 전체 보기', [[$g['label'] . ' 지역 안내', $g['url']], [$g['sido_name'] . ' 전체', $s['url']]]) ?>
+      <?= kkuk_topic_links('주변 지역 바로가기', $sibLinks, 'dong-near:' . $key,
+            '경계가 맞닿은 행정동부터 가까운 순으로 정리했습니다.') ?>
+      <div class="k-mt"><?= kkuk_links_block($g['label'] . ' 전체 보기',
+            [[$g['label'] . ' 지역 안내', $g['url']], [$g['sido_name'] . ' 전체', $s['url']],
+             ['전체 지역 목록', '/sitemap/']]) ?></div>
     </section>
   </div>
 </main>
@@ -516,7 +564,13 @@ function kkuk_page_shop($slug) {
     $p = ['type' => 'shop', 'title' => $title, 'desc' => $desc, 'url' => $x['url'],
           'area' => $d['area'], 'sido_slug' => $x['sido'], 'lat' => $d['lat'], 'lng' => $d['lng'],
           'crumbs' => kkuk_crumbs('shop', ['sido' => $s, 'gu' => $g, 'dong' => $d, 'shop' => $x]),
-          'faq' => $faq, 'shop' => $x];
+          'faq' => $faq, 'shop' => $x,
+          'place' => [
+              'ptype' => 'AdministrativeArea', 'name' => $d['area'],
+              'region' => $g['sido_name'], 'locality' => $g['label'],
+              'lat' => $d['lat'], 'lng' => $d['lng'],
+              'parent' => ['name' => $g['area'], 'url' => $g['url']],
+          ]];
 
     $hero = kkuk_hero_svg([
         'seed' => 'shop:' . $slug, 'kicker' => $d['area'],
@@ -720,6 +774,64 @@ function kkuk_page_404($path = '') {
       <div class="k-mt"><?= kkuk_links_block('지역 바로가기', $sido) ?></div>
       <div class="k-mt" style="max-width:520px"><?= kkuk_cta_tel('404') ?></div>
     </section>
+  </div>
+</main>
+<?php
+    echo kkuk_doc_close($p);
+    return ob_get_clean();
+}
+
+/* =========================================================
+   HTML 사이트맵 — 모든 지역 페이지를 홈에서 2단계 안에 두어 수집을 가속한다
+   ========================================================= */
+function kkuk_page_sitemap() {
+    $sidos = kkuk_sido_all();
+    $nGu = count(kkuk_gu_all());
+    $nDong = count(kkuk_dong_all());
+
+    $title = '전체 지역 목록 | 서울·경기·인천 행정구·행정동 - ' . KKUK_BRAND;
+    $desc  = '서울·경기·인천 행정구 ' . $nGu . '곳과 행정동 ' . $nDong
+           . '곳의 마사지·출장마사지·홈타이 안내 페이지를 한 화면에 모았습니다.';
+
+    $p = ['type' => 'sitemap', 'title' => $title, 'desc' => $desc, 'url' => '/sitemap/',
+          'area' => '서울·경기·인천',
+          'crumbs' => [['홈', '/'], ['전체 지역 목록', '/sitemap/']]];
+
+    ob_start();
+    echo kkuk_doc_open($p);
+    echo kkuk_header('');
+    ?>
+<main id="k-main" class="k-main">
+  <div class="k-wrap">
+    <?= kkuk_bc($p['crumbs']) ?>
+    <section class="k-sect">
+      <h1 class="k-h1">전체 지역 목록</h1>
+      <p class="k-lead" style="margin-top:12px">
+        행정구 <?= $nGu ?>곳과 행정동 <?= $nDong ?>곳을 한 화면에 모았습니다.
+        구 이름을 누르면 구 전체 안내로, 동 이름을 누르면 그 동네 기준 안내로 이동합니다.</p>
+    </section>
+
+    <?php foreach ($sidos as $s): ?>
+    <section class="k-sect">
+      <?= kkuk_shead($s['full'], '행정구 ' . count($s['gu']) . '곳') ?>
+      <div class="k-smap">
+        <?php foreach ($s['gu'] as $gk):
+            $g = kkuk_gu($gk);
+            $dongs = array_map('kkuk_dong', $g['dongs']); ?>
+        <div class="k-smap__gu">
+          <h3><a href="<?= kkuk_e(kkuk_u($g['url'])) ?>"><?= kkuk_e($g['label']) ?> 마사지</a>
+            <?php if ($g['former'] !== ''): ?><span class="k-small">(옛 <?= kkuk_e($g['former']) ?>)</span><?php endif; ?>
+          </h3>
+          <div class="k-smap__dongs">
+            <?php foreach ($dongs as $d): if (!$d) continue; ?>
+            <a href="<?= kkuk_e(kkuk_u($d['url'])) ?>"><?= kkuk_e($d['name']) ?></a>
+            <?php endforeach; ?>
+          </div>
+        </div>
+        <?php endforeach; ?>
+      </div>
+    </section>
+    <?php endforeach; ?>
   </div>
 </main>
 <?php

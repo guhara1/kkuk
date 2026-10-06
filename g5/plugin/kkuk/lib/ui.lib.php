@@ -120,6 +120,9 @@ function kkuk_footer() {
         $sido .= '<li><a href="' . kkuk_e(kkuk_u($s['url'])) . '">' . kkuk_e($s['name'])
                . ' 지역 전체</a></li>';
     }
+    // 전체 지역 목록(HTML 사이트맵) — 모든 지역 페이지를 홈에서 2단계 안에 두어 수집을 빠르게 한다
+    $sido .= '<li><a href="' . kkuk_e(kkuk_u('/sitemap/')) . '"><b>전체 지역 목록 보기</b></a></li>';
+
     $demo = KKUK_DEMO_DATA
         ? '<b>데이터 안내</b> · 현재 노출되는 업소 정보는 화면·구조 검증용 <b>가상 데이터</b>입니다. '
         . '실제 업체 정보로 교체하기 전까지 검색엔진 색인은 차단(noindex)되어 있습니다.<br>'
@@ -295,9 +298,10 @@ function kkuk_filter_bar(array $list) {
 
 /** 본문 블록 → HTML */
 function kkuk_article_html(array $blocks, $note = '') {
+    // 섹션 id 를 순번이 아니라 섹션 고유 id 로 둔다 → 페이지마다 앵커가 안정적으로 유지된다
     $h = '<div class="k-article">';
-    foreach ($blocks as $i => $b) {
-        $h .= '<h2 id="sec-' . ($i + 1) . '">' . kkuk_e($b['h']) . '</h2>';
+    foreach ($blocks as $b) {
+        $h .= '<h2 id="s-' . kkuk_e($b['id']) . '">' . kkuk_e($b['h']) . '</h2>';
         foreach ($b['ps'] as $p) $h .= '<p>' . kkuk_e($p) . '</p>';
     }
     if ($note !== '') $h .= '<p class="k-note">' . $note . '</p>';
@@ -314,4 +318,82 @@ function kkuk_faq_html(array $faq) {
             . kkuk_e($f['q']) . '</summary><div class="k-faq__a k-answer">' . kkuk_e($f['a']) . '</div></details>';
     }
     return $h . '</div>';
+}
+
+/* =========================================================
+   롱테일 주제 내부링크
+   ---------------------------------------------------------
+   같은 앵커 텍스트("○○동")만 반복하면 링크가 한 주제로만 묶인다.
+   지역명 + 주제어 조합을 해시로 분산해 앵커 텍스트를 다양화하고,
+   주제에 맞는 업종 필터(#t-타입)로 바로 들어가게 한다.
+   해시 링크를 쓰는 이유 : 쿼리스트링과 달리 별도 URL 로 수집되지 않아
+   크롤 예산을 쓰지 않으면서 앵커 텍스트 신호는 그대로 본 페이지에 쌓인다.
+   ========================================================= */
+
+/** 주제어 풀 — 업종 필터와 연결되는 것은 필터 앵커를 함께 돌려준다 */
+function kkuk_topics() {
+    return [
+        ['출장마사지',   'visit'], ['홈타이',       'home'],
+        ['로드샵',       'road'],  ['스파',         'spa'],
+        ['마사지',       ''],      ['스웨디시',     ''],
+        ['아로마 마사지', ''],     ['타이 마사지',   ''],
+        ['24시 마사지',  ''],      ['커플 마사지',   ''],
+        ['발 마사지',    ''],      ['스포츠 마사지', ''],
+        ['딥티슈 마사지', ''],     ['전신 마사지',   ''],
+    ];
+}
+
+/**
+ * 지역 링크 하나를 롱테일 앵커로 변환
+ * @return array [앵커텍스트, URL]
+ */
+function kkuk_topic_link($regionName, $url, $seed, $i = 0) {
+    $T = kkuk_topics();
+    [$word, $type] = $T[kkuk_pick($seed . '|' . $i, count($T), 'topic')];
+    $u = $url . ($type !== '' ? '#t-' . $type : '');
+    return [$regionName . ' ' . $word, $u];
+}
+
+/** 롱테일 링크 블록 : items = [[지역명, url], ...] */
+function kkuk_topic_links($title, array $items, $seed, $note = '') {
+    if (!$items) return '';
+    $out = [];
+    foreach (array_values($items) as $i => $it) {
+        $out[] = kkuk_topic_link($it[0], $it[1], $seed, $i);
+    }
+    $h = '<div class="k-links k-links--topic"><div class="k-links__t">' . kkuk_e($title) . '</div>';
+    if ($note !== '') $h .= '<p class="k-links__note">' . kkuk_e($note) . '</p>';
+    $h .= '<div class="k-links__list">';
+    foreach ($out as $l) $h .= '<a href="' . kkuk_e(kkuk_u($l[1])) . '">' . kkuk_e($l[0]) . '</a>';
+    return $h . '</div></div>';
+}
+
+/** 한 지역을 여러 주제로 펼친 링크 (해당 페이지 안의 업종 필터로 이동) */
+function kkuk_topic_facets($regionName, $url, $seed) {
+    $T = kkuk_topics();
+    $pick = [];
+    foreach ($T as $i => [$word, $type]) {
+        if ($type !== '') $pick[] = [$regionName . ' ' . $word, $url . '#t-' . $type];
+    }
+    // 필터가 없는 주제어 중 네 개를 더해 앵커 다양성을 확보한다
+    $plain = array_values(array_filter($T, fn($x) => $x[1] === ''));
+    $idx = range(0, count($plain) - 1);
+    usort($idx, fn($a, $b) => kkuk_hash($seed . '|f' . $a) <=> kkuk_hash($seed . '|f' . $b));
+    foreach (array_slice($idx, 0, 4) as $j) $pick[] = [$regionName . ' ' . $plain[$j][0], $url];
+
+    $h = '<div class="k-chips k-chips--topic">';
+    foreach ($pick as $l) {
+        $h .= '<a class="k-chip k-chip--sm" href="' . kkuk_e(kkuk_u($l[1])) . '">' . kkuk_e($l[0]) . '</a>';
+    }
+    return $h . '</div>';
+}
+
+/** 본문 목차 — 긴 글의 체류·탐색을 돕고 섹션 앵커를 노출한다 */
+function kkuk_article_toc(array $blocks) {
+    if (count($blocks) < 3) return '';
+    $h = '<nav class="k-toc" aria-label="본문 목차"><div class="k-toc__t">이 페이지에서 보기</div><ol>';
+    foreach ($blocks as $b) {
+        $h .= '<li><a href="#s-' . kkuk_e($b['id']) . '">' . kkuk_e($b['h']) . '</a></li>';
+    }
+    return $h . '</ol></nav>';
 }

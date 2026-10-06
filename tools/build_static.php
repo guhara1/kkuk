@@ -26,7 +26,7 @@ function envv($k, $default = null) {
     return ($v === false || $v === '') ? $default : $v;
 }
 
-$base = envv('KKUK_BASE', envv('CF_PAGES_URL', 'https://example.com'));
+$base = envv('KKUK_BASE', envv('CF_PAGES_URL', 'https://kkuk-ary.pages.dev'));
 $base = rtrim($base, '/');
 $demo = strtolower((string)envv('KKUK_DEMO_DATA', 'true')) !== 'false';
 
@@ -99,7 +99,7 @@ function kkuk_shop_img_filter($s) { return '/img/shop/' . $s['slug'] . '.svg'; }
 /* ---------------------------------------------------------
    2. 페이지
    --------------------------------------------------------- */
-$plan = [['/', 'home', null]];
+$plan = [['/', 'home', null], ['/sitemap/', 'sitemap', null]];
 foreach (kkuk_sido_all() as $s)      $plan[] = [$s['url'], 'sido', $s['slug']];
 foreach (kkuk_gu_all()   as $k => $g) $plan[] = [$g['url'], 'gu',   $k];
 foreach (kkuk_dong_all() as $k => $d) $plan[] = [$d['url'], 'dong', $k];
@@ -108,8 +108,9 @@ foreach (kkuk_shop_all() as $k => $x) $plan[] = [$x['url'], 'shop', $k];
 $ok = 0; $fail = 0; $bytes = 0;
 foreach ($plan as $row) {
     list($url, $type, $key) = $row;
-    if      ($type === 'home') $html = kkuk_page_home();
-    elseif  ($type === 'sido') $html = kkuk_page_sido($key);
+    if      ($type === 'home')    $html = kkuk_page_home();
+    elseif  ($type === 'sitemap') $html = kkuk_page_sitemap();
+    elseif  ($type === 'sido')    $html = kkuk_page_sido($key);
     elseif  ($type === 'gu')   $html = kkuk_page_gu($key);
     elseif  ($type === 'dong') $html = kkuk_page_dong($key);
     else                       $html = kkuk_page_shop($key);
@@ -178,10 +179,19 @@ $bytes += put($OUT . '/search/index.html', $sHtml);
 /* ---------------------------------------------------------
    4. 404 / robots / sitemap / rss / _headers
    --------------------------------------------------------- */
-$bytes += put($OUT . '/404.html',     kkuk_page_404(''));
-$bytes += put($OUT . '/robots.txt',   kkuk_robots_txt());
-$bytes += put($OUT . '/sitemap.xml',  kkuk_sitemap_xml());
-$bytes += put($OUT . '/rss.xml',      kkuk_rss_xml());
+$bytes += put($OUT . '/404.html',    kkuk_page_404(''));
+$bytes += put($OUT . '/robots.txt',  kkuk_robots_txt());
+$bytes += put($OUT . '/rss.xml',     kkuk_rss_xml());
+
+/* 사이트맵 인덱스 + 분할 사이트맵 : 검색엔진이 구역별로 나눠 수집해 반영이 빨라진다 */
+$bytes += put($OUT . '/sitemap.xml', kkuk_sitemap_index_xml());
+foreach (array_keys(kkuk_sitemap_parts()) as $part) {
+    $bytes += put($OUT . "/sitemap-{$part}.xml", kkuk_sitemap_xml($part));
+}
+
+/* IndexNow 키 파일 (빙·얀덱스 등 즉시 통보용. 네이버·구글은 미지원) */
+$indexnowKey = substr(hash('sha256', KKUK_BASE . '|kkuk-indexnow'), 0, 32);
+$bytes += put($OUT . "/{$indexnowKey}.txt", $indexnowKey . "\n");
 
 $headers = <<<TXT
 # 정적 자산 : 파일명에 버전 쿼리를 붙이므로 장기 캐시 가능
@@ -213,11 +223,16 @@ foreach ($it as $f) { if ($f->isFile()) $files++; }
 echo "── 정적 빌드 완료 ──\n";
 echo "출력        : dist/\n";
 echo "사이트 주소 : " . KKUK_BASE . "\n";
-echo "색인 정책   : " . (KKUK_DEMO_DATA ? 'noindex (가상 데이터 보호 중)' : 'index 허용') . "\n";
+echo "색인 정책   : " . (KKUK_DEMO_DATA
+    ? '지역 페이지 index / 업소 상세 noindex (가상 데이터 보호)'
+    : '전 페이지 index') . "\n";
 printf("페이지      : %d개 (실패 %d)\n", $ok, $fail);
 printf("업소 썸네일 : %d개 / %.1f MB (외부 .svg)\n", count(kkuk_shop_all()), $thumbBytes / 1048576);
+printf("사이트맵    : 인덱스 + %s\n", implode(', ', array_map(fn($k) => "sitemap-{$k}.xml", array_keys(kkuk_sitemap_parts()))));
+printf("IndexNow 키 : %s.txt\n", $indexnowKey);
 printf("총 파일     : %d개 / %.1f MB\n", $files, ($bytes + $thumbBytes) / 1048576);
 if (KKUK_DEMO_DATA) {
-    echo "\n※ robots.txt 가 전체 차단 상태입니다. 실제 업소 정보로 교체한 뒤\n";
-    echo "  환경 변수 KKUK_DEMO_DATA=false 로 설정하면 색인이 열립니다.\n";
+    echo "\n※ 업소 상세 " . count(kkuk_shop_all()) . "곳은 가상 데이터이므로 noindex 입니다.\n";
+    echo "  (수집은 허용 / 검색 노출만 차단, sitemap-shop.xml 도 생성하지 않음)\n";
+    echo "  실제 업체 정보로 교체한 뒤 KKUK_DEMO_DATA=false 로 두면 업소 페이지도 색인됩니다.\n";
 }

@@ -1,3 +1,30 @@
-# 가상 데이터 운영 중 — 실제 업체 정보로 교체 후 KKUK_DEMO_DATA=false 로 변경
+# 마사지 지역가이드
 User-agent: *
-Disallow: /
+Allow: /
+Disallow: /bbs/
+Disallow: /adm/
+Disallow: /plugin/
+Disallow: /search/
+
+# 네이버
+User-agent: Yeti
+Allow: /
+Disallow: /search/
+
+# 구글
+User-agent: Googlebot
+Allow: /
+Disallow: /search/
+
+# 다음
+User-agent: Daumoa
+Allow: /
+Disallow: /search/
+
+# 빙
+User-agent: bingbot
+Allow: /
+Disallow: /search/
+
+Sitemap: https://kkuk-ary.pages.dev/sitemap.xml
+Sitemap: https://kkuk-ary.pages.dev/rss.xml

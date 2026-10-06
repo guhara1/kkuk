@@ -78,15 +78,31 @@
     });
   }
 
-  /* ---- 5. 본문 h2에 자동 앵커 id (AEO 딥링크) ---- */
+  /* ---- 5. 본문 h2 앵커 보강 (서버에서 id 를 넣지만 누락 대비) ---- */
   function anchorHeads() {
     var i = 0;
     document.querySelectorAll('.k-article h2').forEach(function (h) {
-      if (!h.id) h.id = 'sec-' + (++i);
+      if (!h.id) h.id = 's-auto-' + (++i);
     });
   }
 
-  function init() { centerChip(); bindFilter(); anchorHeads(); }
+  /* ---- 6. #t-업종 해시로 들어오면 해당 업종 필터를 적용한다 ----
+     롱테일 앵커(예: "강남구 출장마사지")가 가리키는 지점이다.
+     쿼리스트링이 아닌 해시를 쓰므로 별도 URL 로 수집되지 않는다. ---- */
+  function applyHashFilter() {
+    var m = (location.hash || '').match(/^#t-(road|visit|home|spa)$/);
+    if (!m) return;
+    var bar = document.querySelector('[data-kkuk-filter]');
+    if (!bar) return;
+    var btn = bar.querySelector('[data-filter="' + m[1] + '"]');
+    if (!btn) return;
+    btn.click();
+    try { bar.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    catch (_) { bar.scrollIntoView(); }
+  }
+  window.addEventListener('hashchange', applyHashFilter);
+
+  function init() { centerChip(); bindFilter(); anchorHeads(); applyHashFilter(); }
   if (document.readyState !== 'loading') init();
   else document.addEventListener('DOMContentLoaded', init);
 })();

@@ -115,12 +115,21 @@ function kkuk_near_gu($guKey) {
     return $out;
 }
 
-/** 전체 페이지 URL 목록 (사이트맵·프리뷰 빌드용) */
-function kkuk_all_urls() {
-    $u = [['/', 1.0, 'daily']];
-    foreach (kkuk_sido_all() as $s) $u[] = [$s['url'], 0.9, 'daily'];
-    foreach (kkuk_gu_all()   as $g) $u[] = [$g['url'], 0.8, 'weekly'];
-    foreach (kkuk_dong_all() as $d) $u[] = [$d['url'], 0.7, 'weekly'];
-    foreach (kkuk_shop_all() as $p) $u[] = [$p['url'], 0.6, 'weekly'];
+/**
+ * 사이트맵용 URL 목록. 파트별로 나눠 두면 사이트맵 인덱스로 분할 제출할 수 있고,
+ * 검색엔진이 구역별로 나눠 수집하기 때문에 색인 반영이 빨라진다.
+ *
+ * @param string $part core | gu | dong | shop | all
+ */
+function kkuk_all_urls($part = 'all') {
+    $u = [];
+    if ($part === 'core' || $part === 'all') {
+        $u[] = ['/', 1.0, 'daily'];
+        $u[] = ['/sitemap/', 0.9, 'daily'];
+        foreach (kkuk_sido_all() as $s) $u[] = [$s['url'], 0.9, 'daily'];
+    }
+    if ($part === 'gu'   || $part === 'all') foreach (kkuk_gu_all()   as $g) $u[] = [$g['url'], 0.8, 'weekly'];
+    if ($part === 'dong' || $part === 'all') foreach (kkuk_dong_all() as $d) $u[] = [$d['url'], 0.7, 'weekly'];
+    if ($part === 'shop' || $part === 'all') foreach (kkuk_shop_all() as $p) $u[] = [$p['url'], 0.6, 'weekly'];
     return $u;
 }

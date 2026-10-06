@@ -110,7 +110,7 @@ Pages → 설정 → 환경 변수에서 지정합니다. 빌드를 로컬에서
 KKUK_BASE="https://kkuk-ary.pages.dev" php tools/build_static.php
 ```
 
-`KKUK_BASE` 를 지정하지 않으면 Cloudflare 가 주는 `CF_PAGES_URL` 을 쓰고, 그것도 없으면 `https://example.com` 이 들어갑니다.
+`KKUK_BASE` 를 지정하지 않으면 Cloudflare 가 주는 `CF_PAGES_URL` 을 쓰고, 그것도 없으면 기본값 `https://kkuk-ary.pages.dev` 가 들어갑니다.
 **canonical 주소가 틀리면 색인이 꼬이므로 반드시 지정하세요.**
 
 ### 4. 색인 정책 주의

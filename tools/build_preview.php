@@ -17,7 +17,7 @@ $ALL  = in_array('--all', $argv ?? [], true);
 /* 데모 데이터 프리뷰이므로 noindex 유지, 평점 스키마는 꺼 둔다 */
 define('KKUK_DEMO_DATA', true);
 define('KKUK_SCHEMA_RATING', false);
-define('KKUK_BASE', 'https://example.com');
+define('KKUK_BASE', getenv('KKUK_BASE') ?: 'https://kkuk-ary.pages.dev');
 
 require $ROOT . '/g5/plugin/kkuk/_common.php';
 require $ROOT . '/g5/plugin/kkuk/tpl/pages.php';
@@ -40,7 +40,7 @@ function flat(string $path): string {
 /* ---------------------------------------------------------
    2. 빌드 계획
    --------------------------------------------------------- */
-$plan = [['/', 'home', null]];
+$plan = [['/', 'home', null], ['/sitemap/', 'sitemap', null]];
 foreach (kkuk_sido_all() as $s) $plan[] = [$s['url'], 'sido', $s['slug']];
 
 if ($ALL) {
@@ -74,9 +74,12 @@ function kkuk_url_filter($path) {
     global $BUILT, $ALL;
     $path = (string)$path;
     if ($path === '' || $path[0] === '#' || preg_match('#^(https?:|tel:|mailto:)#', $path)) return $path;
+    // 해시(#t-visit 같은 업종 필터 앵커)는 떼어 두었다가 다시 붙인다
+    $hash = '';
+    if (($h = strpos($path, '#')) !== false) { $hash = substr($path, $h); $path = substr($path, 0, $h); }
     $key = rtrim($path, '/') . '/';
-    if (isset($BUILT[$key])) return $BUILT[$key];
-    return $ALL ? flat($path) : 'pending.html';
+    if (isset($BUILT[$key])) return $BUILT[$key] . $hash;
+    return ($ALL ? flat($path) : 'pending.html') . $hash;
 }
 function kkuk_asset_filter($file) { return 'asset/' . $file; }
 
@@ -86,8 +89,9 @@ function kkuk_asset_filter($file) { return 'asset/' . $file; }
 $ok = $fail = 0;
 $bytes = 0;
 foreach ($plan as [$url, $type, $key]) {
-    if      ($type === 'home') $html = kkuk_page_home();
-    elseif  ($type === 'sido') $html = kkuk_page_sido($key);
+    if      ($type === 'home')    $html = kkuk_page_home();
+    elseif  ($type === 'sitemap') $html = kkuk_page_sitemap();
+    elseif  ($type === 'sido')    $html = kkuk_page_sido($key);
     elseif  ($type === 'gu')   $html = kkuk_page_gu($key);
     elseif  ($type === 'dong') $html = kkuk_page_dong($key);
     else                       $html = kkuk_page_shop($key);

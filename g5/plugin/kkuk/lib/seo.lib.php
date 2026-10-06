@@ -39,13 +39,19 @@ function kkuk_head_tags(array $p) {
     $h .= '<meta name="description" content="' . kkuk_e($desc) . "\">\n";
     $h .= '<link rel="canonical" href="' . kkuk_e($url) . "\">\n";
 
-    /* 색인 정책 */
-    $robots = KKUK_DEMO_DATA
-        ? 'noindex,nofollow'
-        : 'index,follow,max-image-preview:large,max-snippet:-1';
+    /* 색인 정책
+       지역 페이지(홈·시도·구·동)는 실제 행정구역과 이용 안내를 담은 고유 콘텐츠이므로 색인한다.
+       업소 상세는 가상 데이터인 동안 noindex,follow 로 둔다 — 링크는 따라가되 색인은 막아
+       허위 업체 정보가 검색 결과에 노출되는 것을 방지한다.
+       실제 업체 정보로 교체한 뒤 KKUK_DEMO_DATA=false 로 두면 업소 페이지도 색인된다. */
+    $robots = (KKUK_DEMO_DATA && ($p['type'] ?? '') === 'shop')
+        ? 'noindex,follow'
+        : 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1';
+    if (($p['type'] ?? '') === 'search' || ($p['type'] ?? '') === '404') $robots = 'noindex,follow';
     $h .= '<meta name="robots" content="' . $robots . "\">\n";
-    $h .= '<meta name="NaverBot" content="' . $robots . "\">\n";
-    $h .= '<meta name="Yeti" content="' . $robots . "\">\n";
+    $h .= '<meta name="googlebot" content="' . $robots . "\">\n";
+    $h .= '<meta name="Yeti" content="' . $robots . "\">\n";       // 네이버
+    $h .= '<meta name="Daumoa" content="' . $robots . "\">\n";     // 다음
 
     if (KKUK_NAVER_VERIFY !== '') $h .= '<meta name="naver-site-verification" content="' . kkuk_e(KKUK_NAVER_VERIFY) . "\">\n";
     if (KKUK_GSC_VERIFY   !== '') $h .= '<meta name="google-site-verification" content="' . kkuk_e(KKUK_GSC_VERIFY) . "\">\n";
@@ -119,7 +125,8 @@ function kkuk_jsonld(array $p) {
 
     /* 4. 페이지 본체 — AEO speakable 지정 */
     $g[] = [
-        '@type' => $p['type'] === 'shop' ? 'ItemPage' : 'CollectionPage',
+        '@type' => $p['type'] === 'shop' ? 'ItemPage'
+                 : ($p['type'] === 'search' ? 'SearchResultsPage' : 'CollectionPage'),
         '@id' => $url . '#page', 'url' => $url,
         'name' => $p['title'] ?? '', 'description' => $p['desc'] ?? '',
         'isPartOf' => ['@id' => $site . '#website'],
@@ -129,6 +136,74 @@ function kkuk_jsonld(array $p) {
             'cssSelector' => ['.k-lead', '.k-faq__a', '.k-answer'],
         ],
     ];
+
+    /* 4-2. 사이트 내비게이션 — 주요 진입 경로를 구조화해 크롤러에 노출 */
+    $nav = [];
+    foreach (kkuk_sido_all() as $sd) {
+        $nav[] = ['@type' => 'SiteNavigationElement', 'name' => $sd['name'] . ' 지역 전체',
+                  'url' => kkuk_abs($sd['url'])];
+    }
+    $nav[] = ['@type' => 'SiteNavigationElement', 'name' => '전체 지역 목록', 'url' => kkuk_abs('/sitemap/')];
+    $g[] = ['@type' => 'ItemList', '@id' => $site . '#nav', 'name' => '주요 지역',
+            'itemListElement' => $nav];
+
+    /* 4-3. 지역 자체를 Place 로 선언하고 상위 행정구역과 묶는다 (지역 질의 대응) */
+    if (!empty($p['place'])) {
+        $pl = $p['place'];
+        $node = [
+            '@type' => $pl['ptype'] ?? 'AdministrativeArea',
+            '@id'   => $url . '#place',
+            'name'  => $pl['name'],
+            'url'   => $url,
+            'address' => array_filter([
+                '@type' => 'PostalAddress',
+                'addressCountry' => 'KR',
+                'addressRegion'  => $pl['region'] ?? null,
+                'addressLocality'=> $pl['locality'] ?? null,
+            ]),
+        ];
+        if (!empty($pl['lat'])) {
+            $node['geo'] = ['@type' => 'GeoCoordinates',
+                            'latitude' => $pl['lat'], 'longitude' => $pl['lng']];
+        }
+        if (!empty($pl['parent'])) {
+            $node['containedInPlace'] = ['@type' => 'AdministrativeArea',
+                                         'name' => $pl['parent']['name'],
+                                         'url'  => kkuk_abs($pl['parent']['url'])];
+        }
+        if (!empty($pl['children'])) {
+            $node['containsPlace'] = array_map(fn($c) => [
+                '@type' => 'AdministrativeArea', 'name' => $c['name'], 'url' => kkuk_abs($c['url']),
+            ], array_slice($pl['children'], 0, 30));
+        }
+        $g[] = $node;
+    }
+
+    /* 4-4. 제공 서비스 — 지역 단위로 areaServed 를 붙인다 */
+    if (($p['type'] ?? '') !== '404') {
+        $served = !empty($p['place'])
+            ? [['@type' => 'AdministrativeArea', 'name' => $p['place']['name']]]
+            : [['@type' => 'AdministrativeArea', 'name' => '서울특별시'],
+               ['@type' => 'AdministrativeArea', 'name' => '경기도'],
+               ['@type' => 'AdministrativeArea', 'name' => '인천광역시']];
+        $g[] = [
+            '@type' => 'Service', '@id' => $url . '#service',
+            'serviceType' => '마사지 · 출장마사지 · 홈타이 안내',
+            'name' => (!empty($p['area']) ? $p['area'] . ' ' : '') . '마사지 · 출장마사지 · 홈타이',
+            'provider' => ['@id' => $site . '#org'],
+            'areaServed' => $served,
+            'availableChannel' => [
+                '@type' => 'ServiceChannel',
+                'servicePhone' => ['@type' => 'ContactPoint',
+                                   'telephone' => '+82-' . ltrim(KKUK_TEL, '0'),
+                                   'contactType' => '예약 상담'],
+                'serviceUrl' => $url,
+            ],
+            'hoursAvailable' => ['@type' => 'OpeningHoursSpecification',
+                                 'dayOfWeek' => ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
+                                 'opens' => '00:00', 'closes' => '23:59'],
+        ];
+    }
 
     /* 5. 목록 페이지 : ItemList */
     if (!empty($p['items'])) {
@@ -214,50 +289,91 @@ function kkuk_crumbs($type, $ctx = []) {
     return $c;
 }
 
-/** sitemap.xml 문자열 */
-function kkuk_sitemap_xml() {
-    $now = date('Y-m-d');
+/**
+ * robots.txt
+ * 수집 자체는 항상 허용한다. 색인 여부는 페이지별 meta robots 가 정한다.
+ * (robots.txt 로 막으면 크롤러가 meta 를 읽지 못해 오히려 색인 제어가 안 된다)
+ */
+function kkuk_robots_txt() {
+    $base = rtrim(KKUK_URL, '/');
+    $t  = "# " . KKUK_BRAND . "\n";
+    $t .= "User-agent: *\n";
+    $t .= "Allow: /\n";
+    $t .= "Disallow: /bbs/\nDisallow: /adm/\nDisallow: /plugin/\nDisallow: /search/\n\n";
+    foreach (['Yeti' => '네이버', 'Googlebot' => '구글', 'Daumoa' => '다음',
+              'bingbot' => '빙'] as $ua => $label) {
+        $t .= "# {$label}\nUser-agent: {$ua}\nAllow: /\nDisallow: /search/\n\n";
+    }
+    $t .= "Sitemap: {$base}/sitemap.xml\n";
+    $t .= "Sitemap: {$base}/rss.xml\n";
+    return $t;
+}
+
+/** 사이트맵 파트 정의 — 분할 제출용 */
+function kkuk_sitemap_parts() {
+    $parts = ['core' => '핵심', 'gu' => '행정구', 'dong' => '행정동'];
+    if (!KKUK_DEMO_DATA) $parts['shop'] = '업소';   // 가상 데이터 동안에는 제출하지 않는다
+    return $parts;
+}
+
+/** sitemap.xml — 사이트맵 인덱스 */
+function kkuk_sitemap_index_xml() {
+    $now = date('c');
+    $x = '<?xml version="1.0" encoding="UTF-8"?>' . "\n"
+       . '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+    foreach (array_keys(kkuk_sitemap_parts()) as $k) {
+        $x .= "  <sitemap><loc>" . kkuk_e(kkuk_abs("/sitemap-{$k}.xml"))
+            . "</loc><lastmod>{$now}</lastmod></sitemap>\n";
+    }
+    return $x . "</sitemapindex>\n";
+}
+
+/** sitemap-{part}.xml */
+function kkuk_sitemap_xml($part = 'all') {
+    $now = date('c');
     $x = '<?xml version="1.0" encoding="UTF-8"?>' . "\n"
        . '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
-    foreach (kkuk_all_urls() as [$u, $pri, $freq]) {
+    foreach (kkuk_all_urls($part) as [$u, $pri, $freq]) {
         $x .= "  <url><loc>" . kkuk_e(kkuk_abs($u)) . "</loc><lastmod>{$now}</lastmod>"
             . "<changefreq>{$freq}</changefreq><priority>{$pri}</priority></url>\n";
     }
     return $x . "</urlset>\n";
 }
 
-/** robots.txt 문자열 */
-function kkuk_robots_txt() {
-    if (KKUK_DEMO_DATA) {
-        return "# 가상 데이터 운영 중 — 실제 업체 정보로 교체 후 KKUK_DEMO_DATA=false 로 변경\n"
-             . "User-agent: *\nDisallow: /\n";
-    }
-    return "User-agent: *\nAllow: /\n"
-         . "User-agent: Yeti\nAllow: /\n"            // 네이버
-         . "User-agent: Daumoa\nAllow: /\n"          // 다음
-         . "Disallow: /bbs/\nDisallow: /adm/\nDisallow: /plugin/\nDisallow: /*?\n"
-         . "Sitemap: " . kkuk_abs('/sitemap.xml') . "\n";
-}
-
-/** rss.xml 문자열 — 네이버 서치어드바이저 RSS 제출용 */
-function kkuk_rss_xml($limit = 60) {
-    $items = '';
-    $n = 0;
-    foreach (kkuk_gu_all() as $g) {
-        if ($n++ >= $limit) break;
+/**
+ * rss.xml — 네이버 서치어드바이저 RSS 제출용.
+ * 시도 → 행정구 → 행정동 순으로 담아, 상위 구조부터 수집되도록 한다.
+ */
+function kkuk_rss_xml($limit = 500) {
+    $items = ''; $n = 0;
+    $push = function ($title, $url, $desc) use (&$items, &$n, $limit) {
+        if ($n++ >= $limit) return;
         $items .= "    <item>\n"
-               . '      <title>' . kkuk_e($g['area'] . ' 지역별 마사지 안내') . "</title>\n"
-               . '      <link>' . kkuk_e(kkuk_abs($g['url'])) . "</link>\n"
-               . '      <guid isPermaLink="true">' . kkuk_e(kkuk_abs($g['url'])) . "</guid>\n"
-               . '      <description>' . kkuk_e($g['blurb']) . "</description>\n"
+               . '      <title>' . kkuk_e($title) . "</title>\n"
+               . '      <link>' . kkuk_e(kkuk_abs($url)) . "</link>\n"
+               . '      <guid isPermaLink="true">' . kkuk_e(kkuk_abs($url)) . "</guid>\n"
+               . '      <description>' . kkuk_e($desc) . "</description>\n"
                . '      <pubDate>' . date('r') . "</pubDate>\n"
                . "    </item>\n";
+    };
+    foreach (kkuk_sido_all() as $s) {
+        $push($s['full'] . ' 지역별 마사지 안내', $s['url'],
+              $s['full'] . ' 행정구와 행정동 기준으로 로드샵·출장마사지·홈타이 정보를 정리했습니다.');
+    }
+    foreach (kkuk_gu_all() as $g) {
+        $push($g['area'] . ' 마사지 · 로드샵 안내', $g['url'], $g['blurb']);
+    }
+    foreach (kkuk_dong_all() as $d) {
+        $g = kkuk_gu($d['gu']);
+        $push($d['area'] . ' 마사지 안내', $d['url'],
+              $d['area'] . ' ' . kkuk_kind_label($d['kind']) . ' 생활권 기준 이용 안내입니다.');
     }
     return '<?xml version="1.0" encoding="UTF-8"?>' . "\n"
          . '<rss version="2.0"><channel>' . "\n"
          . '    <title>' . kkuk_e(KKUK_BRAND) . "</title>\n"
          . '    <link>' . kkuk_e(kkuk_abs('/')) . "</link>\n"
          . '    <description>' . kkuk_e('서울 · 경기 · 인천 행정구/행정동별 마사지, 출장마사지, 홈타이 안내') . "</description>\n"
-         . "    <language>ko</language>\n" . $items
+         . "    <language>ko</language>\n"
+         . '    <lastBuildDate>' . date('r') . "</lastBuildDate>\n" . $items
          . "</channel></rss>\n";
 }

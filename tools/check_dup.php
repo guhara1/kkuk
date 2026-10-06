@@ -19,7 +19,7 @@ $TOP  = 10;
 foreach ($argv as $i => $a) if ($a === '--top' && isset($argv[$i + 1])) $TOP = (int)$argv[$i + 1];
 
 define('KKUK_DEMO_DATA', true);
-define('KKUK_BASE', 'https://example.com');
+define('KKUK_BASE', getenv('KKUK_BASE') ?: 'https://kkuk-ary.pages.dev');
 require $ROOT . '/g5/plugin/kkuk/_common.php';
 
 /** 본문 생성 → 평문 */

@@ -22,7 +22,7 @@ if (!defined('_KKUK_BOOT_')) {
     /* ---- 브랜드 (미확정 상태의 임시 표기 — 한 곳만 고치면 전체 반영) ---- */
     if (!defined('KKUK_BRAND'))     define('KKUK_BRAND',     '마사지 지역가이드');
     if (!defined('KKUK_BRAND_SUB')) define('KKUK_BRAND_SUB', '서울 · 경기 · 인천');
-    if (!defined('KKUK_BASE'))      define('KKUK_BASE',      'https://example.com');
+    if (!defined('KKUK_BASE'))      define('KKUK_BASE',      'https://kkuk-ary.pages.dev');
 
     /* ---- 전화 (고정) ---- */
     if (!defined('KKUK_TEL'))      define('KKUK_TEL',      '05082024749');

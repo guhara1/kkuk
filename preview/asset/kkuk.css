@@ -349,6 +349,42 @@ button{font-family:inherit}
 }
 .k-links__list a:hover{border-color:var(--brand);color:var(--brand-2);text-decoration:none}
 
+/* 롱테일 주제 링크 블록 */
+.k-links--topic{background:var(--brand-tint);border-color:var(--brand-tint-2)}
+.k-links__note{margin:-4px 0 12px;font-size:13.5px;line-height:1.6;color:var(--ink-3)}
+.k-chips--topic{gap:7px}
+.k-chip--sm{min-height:38px;padding:5px 12px;font-size:13.8px;font-weight:720}
+
+/* 본문 목차 */
+.k-toc{
+  margin:0 0 22px;padding:16px 18px;border:2px solid var(--line-2);border-radius:var(--r);
+  background:var(--surface-2);
+}
+.k-toc__t{font-size:14px;font-weight:850;color:var(--ink);margin-bottom:9px}
+.k-toc ol{counter-reset:k;display:grid;gap:5px}
+.k-toc li{counter-increment:k;position:relative;padding-left:24px;font-size:15px;line-height:1.65}
+.k-toc li::before{
+  content:counter(k);position:absolute;left:0;top:2px;width:18px;height:18px;border-radius:5px;
+  background:var(--brand);color:#fff;font-size:11px;font-weight:800;display:grid;place-items:center;
+}
+.k-toc a{color:var(--ink-2);font-weight:650}
+.k-toc a:hover{color:var(--brand-2)}
+
+/* HTML 사이트맵 */
+.k-smap{display:grid;gap:var(--gap)}
+.k-smap__gu{
+  border:2px solid var(--line);border-radius:var(--r);background:var(--surface);
+  padding:14px 16px;
+}
+.k-smap__gu h3{font-size:16.5px;margin-bottom:9px}
+.k-smap__gu h3 a{color:var(--ink)}
+.k-smap__dongs{display:flex;flex-wrap:wrap;gap:6px}
+.k-smap__dongs a{
+  font-size:13.8px;font-weight:650;color:var(--ink-2);padding:4px 10px;border-radius:var(--r-pill);
+  border:1px solid var(--line);background:var(--surface-2);min-height:34px;display:inline-flex;align-items:center;
+}
+.k-smap__dongs a:hover{border-color:var(--brand);color:var(--brand-2);text-decoration:none}
+
 /* ---------- 14. 사이드 (예약 패널) ---------- */
 .k-aside{display:grid;gap:var(--gap);align-content:start}
 @media (min-width:1000px){.k-aside{position:sticky;top:84px}}
