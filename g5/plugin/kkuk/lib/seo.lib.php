@@ -246,7 +246,7 @@ function kkuk_rss_xml($limit = 60) {
     foreach (kkuk_gu_all() as $g) {
         if ($n++ >= $limit) break;
         $items .= "    <item>\n"
-               . '      <title>' . kkuk_e($g['area'] . ' 마사지 · 출장마사지 · 홈타이 안내') . "</title>\n"
+               . '      <title>' . kkuk_e($g['area'] . ' 지역별 마사지 안내') . "</title>\n"
                . '      <link>' . kkuk_e(kkuk_abs($g['url'])) . "</link>\n"
                . '      <guid isPermaLink="true">' . kkuk_e(kkuk_abs($g['url'])) . "</guid>\n"
                . '      <description>' . kkuk_e($g['blurb']) . "</description>\n"

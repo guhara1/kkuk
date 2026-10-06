@@ -15,7 +15,9 @@ function kkuk_page_home() {
     foreach ($sidos as $s) { $totalGu += $s['gu_count']; $totalShop += $s['shop_count']; }
     $totalDong = count(kkuk_dong_all());
 
-    $title = KKUK_BRAND . ' | 서울·경기·인천 마사지 · 출장마사지 · 홈타이 지역 안내';
+    // 타이틀에는 '출장마사지 · 홈타이' 키워드를 넣지 않는다(요청 사항).
+    // 두 키워드는 메타 설명 · 본문 · 업소 디스크립션에서 계속 노출된다.
+    $title = KKUK_BRAND . ' | 서울·경기·인천 지역별 마사지 안내';
     $desc  = '서울 25개 구, 경기 42개 시·구, 인천 10개 구·군과 대표 행정동 ' . $totalDong
            . '곳을 기준으로 로드샵과 출장마사지, 홈타이 정보를 지역별로 정리했습니다. 예약 상담 ' . KKUK_TEL_FMT . '.';
 
@@ -132,7 +134,7 @@ function kkuk_page_sido($slug) {
     $dongN = 0;
     foreach ($gus as $g) $dongN += $g['dong_count'];
 
-    $title = $s['name'] . ' 마사지 | 출장마사지·홈타이 ' . $s['gu_count'] . '개 구 지역별 안내 - ' . KKUK_BRAND;
+    $title = $s['name'] . ' 마사지 | ' . $s['gu_count'] . '개 구 지역별 안내 - ' . KKUK_BRAND;
     $desc  = $s['full'] . ' ' . $s['gu_count'] . '개 행정구와 대표 행정동 ' . $dongN
            . '곳 기준 로드샵·출장마사지·홈타이 ' . $s['shop_count'] . '곳 정리. 접근 동선과 요금 기준, 예약 전 확인 사항까지. 상담 ' . KKUK_TEL_FMT . '.';
 
@@ -232,7 +234,7 @@ function kkuk_page_gu($key) {
     $blocks = kkuk_build_content($ctx, 'gu', 1500);
     $faq    = kkuk_faq(kkuk_content_vars($ctx), $key, 5);
 
-    $title = $g['label'] . ' 마사지 | 출장마사지·홈타이 로드샵 ' . $g['shop_count'] . '곳 - ' . KKUK_BRAND;
+    $title = $g['label'] . ' 마사지 | 로드샵 ' . $g['shop_count'] . '곳 - ' . KKUK_BRAND;
     $desc  = kkuk_meta_desc($ctx, 'gu');
 
     $p = ['type' => 'gu', 'title' => $title, 'desc' => $desc, 'url' => $g['url'],
@@ -374,7 +376,7 @@ function kkuk_page_dong($key) {
     $blocks = kkuk_build_content($ctx, 'dong', 1500);
     $faq    = kkuk_faq(kkuk_content_vars($ctx), $key, 5);
 
-    $title = $d['name'] . ' 마사지 | ' . $g['label'] . ' 출장마사지·홈타이 안내 - ' . KKUK_BRAND;
+    $title = $d['name'] . ' 마사지 | ' . $g['label'] . ' 지역 안내 - ' . KKUK_BRAND;
     $desc  = kkuk_meta_desc($ctx, 'dong');
 
     $p = ['type' => 'dong', 'title' => $title, 'desc' => $desc, 'url' => $d['url'],
@@ -483,7 +485,9 @@ function kkuk_page_shop($slug) {
                 'S_SHOP' => '업소', 'S_AREA' => '지역', 'A1' => $d['anchors'][0] ?? $d['name']];
     $faq = kkuk_faq($faqVars, 'shop:' . $slug, 4);
 
-    $title = $x['name'] . ' | ' . $d['area'] . ' ' . $x['type_label'] . ' - ' . KKUK_BRAND;
+    // 업종 라벨이 '출장마사지'·'홈타이' 인 업소는 타이틀에서 라벨을 생략한다(로드샵·스파는 유지).
+    $tl = in_array($x['type'], ['visit', 'home'], true) ? '' : ' ' . $x['type_label'];
+    $title = $x['name'] . ' | ' . $d['area'] . $tl . ' - ' . KKUK_BRAND;
     $desc  = mb_substr(preg_replace('/\s+/u', ' ', $x['desc']), 0, 155, 'UTF-8');
 
     $p = ['type' => 'shop', 'title' => $title, 'desc' => $desc, 'url' => $x['url'],

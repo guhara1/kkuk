@@ -3,7 +3,7 @@
  * 가상 업소 데이터 (운영 전 실제 정보로 교체)
  *
  * ⚠ 자동 생성 파일 — 직접 수정하지 말고 `php tools/gen_data.php` 로 다시 만든다.
- *   생성 시각 : 2026-10-06 01:20
+ *   생성 시각 : 2026-10-06 01:50
  */
 return array (
   'yeoksam-1' => 
@@ -106,7 +106,7 @@ return array (
   'yeoksam-3' => 
   array (
     'slug' => 'yeoksam-3',
-    'name' => '정담 빛 홈케어',
+    'name' => '정담 빛 홈테라피',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -251,7 +251,7 @@ return array (
   'samseong-2' => 
   array (
     'slug' => 'samseong-2',
-    'name' => '단아 결 홈케어',
+    'name' => '단아 결 홈테라피',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -298,7 +298,7 @@ return array (
   'samseong-3' => 
   array (
     'slug' => 'samseong-3',
-    'name' => '이룸 숲 홈테라피',
+    'name' => '이룸 숲 홈바디케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -490,7 +490,7 @@ return array (
   'nonhyeon-2' => 
   array (
     'slug' => 'nonhyeon-2',
-    'name' => '수아 빛 홈바디케어',
+    'name' => '수아 빛 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -1649,7 +1649,7 @@ return array (
   'mia-4' => 
   array (
     'slug' => 'mia-4',
-    'name' => '다온 샘 홈케어',
+    'name' => '다온 샘 홈테라피',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -1697,7 +1697,7 @@ return array (
   'mia-5' => 
   array (
     'slug' => 'mia-5',
-    'name' => '하온 뜰 홈타이',
+    'name' => '하온 뜰 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -2180,7 +2180,7 @@ return array (
   'deungchon-2' => 
   array (
     'slug' => 'deungchon-2',
-    'name' => '소율 숲 홈타이',
+    'name' => '소율 숲 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -2373,7 +2373,7 @@ return array (
   'magok-2' => 
   array (
     'slug' => 'magok-2',
-    'name' => '초록 샘 홈바디케어',
+    'name' => '초록 샘 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -2517,7 +2517,7 @@ return array (
   'sillim-2' => 
   array (
     'slug' => 'sillim-2',
-    'name' => '초록 빛 홈바디케어',
+    'name' => '초록 빛 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -2564,7 +2564,7 @@ return array (
   'sillim-3' => 
   array (
     'slug' => 'sillim-3',
-    'name' => '하루 길 홈타이',
+    'name' => '하루 길 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -2756,7 +2756,7 @@ return array (
   'bongcheon-2' => 
   array (
     'slug' => 'bongcheon-2',
-    'name' => '수아 홈바디케어',
+    'name' => '수아 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -3093,7 +3093,7 @@ return array (
   'guui-3' => 
   array (
     'slug' => 'guui-3',
-    'name' => '고운 향 홈타이',
+    'name' => '고운 향 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -3286,7 +3286,7 @@ return array (
   'jayang-2' => 
   array (
     'slug' => 'jayang-2',
-    'name' => '라온 홈케어',
+    'name' => '라온 홈테라피',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -3575,7 +3575,7 @@ return array (
   'hwayang-4' => 
   array (
     'slug' => 'hwayang-4',
-    'name' => '차오 결 홈바디케어',
+    'name' => '차오 결 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -3670,7 +3670,7 @@ return array (
   'guro-dong-2' => 
   array (
     'slug' => 'guro-dong-2',
-    'name' => '노을 향 홈타이',
+    'name' => '노을 향 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -4299,7 +4299,7 @@ return array (
   'gasan-2' => 
   array (
     'slug' => 'gasan-2',
-    'name' => '미르 뜰 홈타이',
+    'name' => '미르 뜰 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -4443,7 +4443,7 @@ return array (
   'gasan-5' => 
   array (
     'slug' => 'gasan-5',
-    'name' => '소율 뜰 홈타이',
+    'name' => '소율 뜰 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -4732,7 +4732,7 @@ return array (
   'siheung-dong-2' => 
   array (
     'slug' => 'siheung-dong-2',
-    'name' => '미르 숲 홈타이',
+    'name' => '미르 숲 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -5117,7 +5117,7 @@ return array (
   'junggye-3' => 
   array (
     'slug' => 'junggye-3',
-    'name' => '모린 홈케어',
+    'name' => '모린 홈테라피',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -6034,7 +6034,7 @@ return array (
   'jangan-3' => 
   array (
     'slug' => 'jangan-3',
-    'name' => '고운 숲 홈타이',
+    'name' => '고운 숲 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -6082,7 +6082,7 @@ return array (
   'jangan-4' => 
   array (
     'slug' => 'jangan-4',
-    'name' => '아린 숲 홈테라피',
+    'name' => '아린 숲 홈바디케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -6613,7 +6613,7 @@ return array (
   'sadang-3' => 
   array (
     'slug' => 'sadang-3',
-    'name' => '아람 길 홈타이',
+    'name' => '아람 길 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -7483,7 +7483,7 @@ return array (
   'yeonnam-4' => 
   array (
     'slug' => 'yeonnam-4',
-    'name' => '비담 빛 홈바디케어',
+    'name' => '비담 빛 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -7628,7 +7628,7 @@ return array (
   'gongdeok-2' => 
   array (
     'slug' => 'gongdeok-2',
-    'name' => '차오 홈바디케어',
+    'name' => '차오 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -7868,7 +7868,7 @@ return array (
   'sinchon-2' => 
   array (
     'slug' => 'sinchon-2',
-    'name' => '소율 홈타이',
+    'name' => '소율 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -8062,7 +8062,7 @@ return array (
   'hongje-2' => 
   array (
     'slug' => 'hongje-2',
-    'name' => '사름 결 홈케어',
+    'name' => '사름 결 홈테라피',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -9220,7 +9220,7 @@ return array (
   'seongsu-5' => 
   array (
     'slug' => 'seongsu-5',
-    'name' => '하루 향 홈타이',
+    'name' => '하루 향 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -9316,7 +9316,7 @@ return array (
   'haengdang-2' => 
   array (
     'slug' => 'haengdang-2',
-    'name' => '비담 홈바디케어',
+    'name' => '비담 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -9847,7 +9847,7 @@ return array (
   'gireum-3' => 
   array (
     'slug' => 'gireum-3',
-    'name' => '여울 홈테라피',
+    'name' => '여울 홈바디케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -10040,7 +10040,7 @@ return array (
   'jangwi-3' => 
   array (
     'slug' => 'jangwi-3',
-    'name' => '바름 홈케어',
+    'name' => '바름 홈테라피',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -10232,7 +10232,7 @@ return array (
   'jongam-3' => 
   array (
     'slug' => 'jongam-3',
-    'name' => '포근 빛 홈바디케어',
+    'name' => '포근 빛 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -10425,7 +10425,7 @@ return array (
   'jamsil-3' => 
   array (
     'slug' => 'jamsil-3',
-    'name' => '도담 결 홈바디케어',
+    'name' => '도담 결 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -10473,7 +10473,7 @@ return array (
   'jamsil-4' => 
   array (
     'slug' => 'jamsil-4',
-    'name' => '단아 빛 홈케어',
+    'name' => '단아 빛 홈테라피',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -10713,7 +10713,7 @@ return array (
   'munjeong-2' => 
   array (
     'slug' => 'munjeong-2',
-    'name' => '한아 빛 홈바디케어',
+    'name' => '한아 빛 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -11196,7 +11196,7 @@ return array (
   'sinjeong-2' => 
   array (
     'slug' => 'sinjeong-2',
-    'name' => '가온 결 홈바디케어',
+    'name' => '가온 결 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -11678,7 +11678,7 @@ return array (
   'yeoui-5' => 
   array (
     'slug' => 'yeoui-5',
-    'name' => '고운 홈타이',
+    'name' => '고운 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -11774,7 +11774,7 @@ return array (
   'dangsan-2' => 
   array (
     'slug' => 'dangsan-2',
-    'name' => '채윤 홈테라피',
+    'name' => '채윤 홈바디케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -11967,7 +11967,7 @@ return array (
   'daerim-2' => 
   array (
     'slug' => 'daerim-2',
-    'name' => '늘봄 뜰 홈테라피',
+    'name' => '늘봄 뜰 홈바디케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -12015,7 +12015,7 @@ return array (
   'daerim-3' => 
   array (
     'slug' => 'daerim-3',
-    'name' => '새뜸 빛 홈케어',
+    'name' => '새뜸 빛 홈테라피',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -12401,7 +12401,7 @@ return array (
   'hyochang-2' => 
   array (
     'slug' => 'hyochang-2',
-    'name' => '모린 샘 홈케어',
+    'name' => '모린 샘 홈테라피',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -12448,7 +12448,7 @@ return array (
   'hyochang-3' => 
   array (
     'slug' => 'hyochang-3',
-    'name' => '나래 향 홈테라피',
+    'name' => '나래 향 홈바디케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -12786,7 +12786,7 @@ return array (
   'bulgwang-3' => 
   array (
     'slug' => 'bulgwang-3',
-    'name' => '아람 향 홈타이',
+    'name' => '아람 향 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -13074,7 +13074,7 @@ return array (
   'susaek-4' => 
   array (
     'slug' => 'susaek-4',
-    'name' => '차오 샘 홈바디케어',
+    'name' => '차오 샘 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -13316,7 +13316,7 @@ return array (
   'jongno-ga-5' => 
   array (
     'slug' => 'jongno-ga-5',
-    'name' => '노을 뜰 홈타이',
+    'name' => '노을 뜰 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -14765,7 +14765,7 @@ return array (
   'jangan-jeongja-4' => 
   array (
     'slug' => 'jangan-jeongja-4',
-    'name' => '한아 홈바디케어',
+    'name' => '한아 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -14910,7 +14910,7 @@ return array (
   'jowon-3' => 
   array (
     'slug' => 'jowon-3',
-    'name' => '아린 뜰 홈테라피',
+    'name' => '아린 뜰 홈바디케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -15103,7 +15103,7 @@ return array (
   'pajang-3' => 
   array (
     'slug' => 'pajang-3',
-    'name' => '도담 홈바디케어',
+    'name' => '도담 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -15151,7 +15151,7 @@ return array (
   'pajang-4' => 
   array (
     'slug' => 'pajang-4',
-    'name' => '단아 샘 홈케어',
+    'name' => '단아 샘 홈테라피',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -15682,7 +15682,7 @@ return array (
   'seryu-2' => 
   array (
     'slug' => 'seryu-2',
-    'name' => '초록 홈바디케어',
+    'name' => '초록 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -15779,7 +15779,7 @@ return array (
   'seryu-4' => 
   array (
     'slug' => 'seryu-4',
-    'name' => '솔담 뜰 홈테라피',
+    'name' => '솔담 뜰 홈바디케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -16069,7 +16069,7 @@ return array (
   'maegyo-2' => 
   array (
     'slug' => 'maegyo-2',
-    'name' => '바름 샘 홈케어',
+    'name' => '바름 샘 홈테라피',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -16790,7 +16790,7 @@ return array (
   'gwanggyo-2' => 
   array (
     'slug' => 'gwanggyo-2',
-    'name' => '담소 홈케어',
+    'name' => '담소 홈테라피',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -17080,7 +17080,7 @@ return array (
   'maetan-4' => 
   array (
     'slug' => 'maetan-4',
-    'name' => '미르 홈타이',
+    'name' => '미르 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -17224,7 +17224,7 @@ return array (
   'sinheung-2' => 
   array (
     'slug' => 'sinheung-2',
-    'name' => '여울 길 홈테라피',
+    'name' => '여울 길 홈바디케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -17321,7 +17321,7 @@ return array (
   'sinheung-4' => 
   array (
     'slug' => 'sinheung-4',
-    'name' => '수아 샘 홈바디케어',
+    'name' => '수아 샘 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -17609,7 +17609,7 @@ return array (
   'sinchon-sn-2' => 
   array (
     'slug' => 'sinchon-sn-2',
-    'name' => '온담 숲 홈타이',
+    'name' => '온담 숲 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -17657,7 +17657,7 @@ return array (
   'sinchon-sn-3' => 
   array (
     'slug' => 'sinchon-sn-3',
-    'name' => '포근 샘 홈바디케어',
+    'name' => '포근 샘 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -17996,7 +17996,7 @@ return array (
   'geumgwang-3' => 
   array (
     'slug' => 'geumgwang-3',
-    'name' => '미르 향 홈타이',
+    'name' => '미르 향 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -18428,7 +18428,7 @@ return array (
   'bundang-jeongja-4' => 
   array (
     'slug' => 'bundang-jeongja-4',
-    'name' => '이룸 홈테라피',
+    'name' => '이룸 홈바디케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -19542,7 +19542,7 @@ return array (
   'janghang-2' => 
   array (
     'slug' => 'janghang-2',
-    'name' => '도담 빛 홈바디케어',
+    'name' => '도담 빛 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -19639,7 +19639,7 @@ return array (
   'janghang-4' => 
   array (
     'slug' => 'janghang-4',
-    'name' => '해름 숲 홈테라피',
+    'name' => '해름 숲 홈바디케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -19783,7 +19783,7 @@ return array (
   'madu-3' => 
   array (
     'slug' => 'madu-3',
-    'name' => '늘봄 숲 홈테라피',
+    'name' => '늘봄 숲 홈바디케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -19830,7 +19830,7 @@ return array (
   'madu-4' => 
   array (
     'slug' => 'madu-4',
-    'name' => '하온 홈타이',
+    'name' => '하온 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -19878,7 +19878,7 @@ return array (
   'madu-5' => 
   array (
     'slug' => 'madu-5',
-    'name' => '사름 빛 홈케어',
+    'name' => '사름 빛 홈테라피',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -20022,7 +20022,7 @@ return array (
   'baekseok-3' => 
   array (
     'slug' => 'baekseok-3',
-    'name' => '다온 홈케어',
+    'name' => '다온 홈테라피',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -20407,7 +20407,7 @@ return array (
   'daehwa-2' => 
   array (
     'slug' => 'daehwa-2',
-    'name' => '수아 결 홈바디케어',
+    'name' => '수아 결 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -20747,7 +20747,7 @@ return array (
   'gimnyangjang-2' => 
   array (
     'slug' => 'gimnyangjang-2',
-    'name' => '사름 샘 홈케어',
+    'name' => '사름 샘 홈테라피',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -20987,7 +20987,7 @@ return array (
   'yeokbuk-3' => 
   array (
     'slug' => 'yeokbuk-3',
-    'name' => '여울 숲 홈테라피',
+    'name' => '여울 숲 홈바디케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -21034,7 +21034,7 @@ return array (
   'yeokbuk-4' => 
   array (
     'slug' => 'yeokbuk-4',
-    'name' => '해온 숲 홈타이',
+    'name' => '해온 숲 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -21566,7 +21566,7 @@ return array (
   'yeongdeok-2' => 
   array (
     'slug' => 'yeongdeok-2',
-    'name' => '아람 홈타이',
+    'name' => '아람 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -21760,7 +21760,7 @@ return array (
   'pungdeokcheon-2' => 
   array (
     'slug' => 'pungdeokcheon-2',
-    'name' => '리안 결 홈바디케어',
+    'name' => '리안 결 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -21855,7 +21855,7 @@ return array (
   'pungdeokcheon-4' => 
   array (
     'slug' => 'pungdeokcheon-4',
-    'name' => '윤슬 숲 홈테라피',
+    'name' => '윤슬 숲 홈바디케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -22532,7 +22532,7 @@ return array (
   'bono-4' => 
   array (
     'slug' => 'bono-4',
-    'name' => '소율 길 홈타이',
+    'name' => '소율 길 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -22725,7 +22725,7 @@ return array (
   'wolpi-4' => 
   array (
     'slug' => 'wolpi-4',
-    'name' => '하루 뜰 홈타이',
+    'name' => '하루 뜰 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -22966,7 +22966,7 @@ return array (
   'gojan-4' => 
   array (
     'slug' => 'gojan-4',
-    'name' => '라온 결 홈케어',
+    'name' => '라온 결 홈테라피',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -23111,7 +23111,7 @@ return array (
   'choji-3' => 
   array (
     'slug' => 'choji-3',
-    'name' => '새뜸 홈케어',
+    'name' => '새뜸 홈테라피',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -23159,7 +23159,7 @@ return array (
   'choji-4' => 
   array (
     'slug' => 'choji-4',
-    'name' => '유담 홈바디케어',
+    'name' => '유담 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -23351,7 +23351,7 @@ return array (
   'daebu-3' => 
   array (
     'slug' => 'daebu-3',
-    'name' => '리안 홈바디케어',
+    'name' => '리안 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -23447,7 +23447,7 @@ return array (
   'anyang-dong-2' => 
   array (
     'slug' => 'anyang-dong-2',
-    'name' => '하루 홈타이',
+    'name' => '하루 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -23640,7 +23640,7 @@ return array (
   'seoksu-2' => 
   array (
     'slug' => 'seoksu-2',
-    'name' => '온담 길 홈타이',
+    'name' => '온담 길 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -23735,7 +23735,7 @@ return array (
   'bakdal-2' => 
   array (
     'slug' => 'bakdal-2',
-    'name' => '도담 샘 홈바디케어',
+    'name' => '도담 샘 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -23929,7 +23929,7 @@ return array (
   'pyeongchon-2' => 
   array (
     'slug' => 'pyeongchon-2',
-    'name' => '온담 향 홈타이',
+    'name' => '온담 향 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -24166,7 +24166,7 @@ return array (
   'beomgye-2' => 
   array (
     'slug' => 'beomgye-2',
-    'name' => '포근 결 홈바디케어',
+    'name' => '포근 결 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -24262,7 +24262,7 @@ return array (
   'beomgye-4' => 
   array (
     'slug' => 'beomgye-4',
-    'name' => '이룸 향 홈테라피',
+    'name' => '이룸 향 홈바디케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -24405,7 +24405,7 @@ return array (
   'hogye-2' => 
   array (
     'slug' => 'hogye-2',
-    'name' => '서담 샘 홈케어',
+    'name' => '서담 샘 홈테라피',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -24792,7 +24792,7 @@ return array (
   'jungdong-5' => 
   array (
     'slug' => 'jungdong-5',
-    'name' => '노을 숲 홈타이',
+    'name' => '노을 숲 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -24887,7 +24887,7 @@ return array (
   'sangdong-2' => 
   array (
     'slug' => 'sangdong-2',
-    'name' => '서담 빛 홈케어',
+    'name' => '서담 빛 홈테라피',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -25660,7 +25660,7 @@ return array (
   'pyeongnae-3' => 
   array (
     'slug' => 'pyeongnae-3',
-    'name' => '비담 샘 홈바디케어',
+    'name' => '비담 샘 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -25755,7 +25755,7 @@ return array (
   'pyeongnae-5' => 
   array (
     'slug' => 'pyeongnae-5',
-    'name' => '온담 홈타이',
+    'name' => '온담 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -25898,7 +25898,7 @@ return array (
   'dongtan-3' => 
   array (
     'slug' => 'dongtan-3',
-    'name' => '모린 빛 홈케어',
+    'name' => '모린 빛 홈테라피',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -26236,7 +26236,7 @@ return array (
   'hyangnam-2' => 
   array (
     'slug' => 'hyangnam-2',
-    'name' => '새뜸 결 홈케어',
+    'name' => '새뜸 결 홈테라피',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -26623,7 +26623,7 @@ return array (
   'godeok-3' => 
   array (
     'slug' => 'godeok-3',
-    'name' => '라온 샘 홈케어',
+    'name' => '라온 샘 홈테라피',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -26766,7 +26766,7 @@ return array (
   'songtan-3' => 
   array (
     'slug' => 'songtan-3',
-    'name' => '여울 향 홈테라피',
+    'name' => '여울 향 홈바디케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -27006,7 +27006,7 @@ return array (
   'uijeongbu-dong-4' => 
   array (
     'slug' => 'uijeongbu-dong-4',
-    'name' => '아람 숲 홈타이',
+    'name' => '아람 숲 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -27150,7 +27150,7 @@ return array (
   'howon-2' => 
   array (
     'slug' => 'howon-2',
-    'name' => '포근 홈바디케어',
+    'name' => '포근 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -27198,7 +27198,7 @@ return array (
   'howon-3' => 
   array (
     'slug' => 'howon-3',
-    'name' => '해온 홈타이',
+    'name' => '해온 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -27246,7 +27246,7 @@ return array (
   'howon-4' => 
   array (
     'slug' => 'howon-4',
-    'name' => '이룸 뜰 홈테라피',
+    'name' => '이룸 뜰 홈바디케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -27391,7 +27391,7 @@ return array (
   'songsan-2' => 
   array (
     'slug' => 'songsan-2',
-    'name' => '채윤 뜰 홈테라피',
+    'name' => '채윤 뜰 홈바디케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -27438,7 +27438,7 @@ return array (
   'songsan-3' => 
   array (
     'slug' => 'songsan-3',
-    'name' => '노을 홈타이',
+    'name' => '노을 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -27630,7 +27630,7 @@ return array (
   'jeongwang-3' => 
   array (
     'slug' => 'jeongwang-3',
-    'name' => '윤슬 길 홈테라피',
+    'name' => '윤슬 길 홈바디케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -27823,7 +27823,7 @@ return array (
   'baegot-2' => 
   array (
     'slug' => 'baegot-2',
-    'name' => '리안 빛 홈바디케어',
+    'name' => '리안 빛 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -28256,7 +28256,7 @@ return array (
   'unjeong-3' => 
   array (
     'slug' => 'unjeong-3',
-    'name' => '늘봄 향 홈테라피',
+    'name' => '늘봄 향 홈바디케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -29416,7 +29416,7 @@ return array (
   'gurae-3' => 
   array (
     'slug' => 'gurae-3',
-    'name' => '다온 결 홈케어',
+    'name' => '다온 결 홈테라피',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -29560,7 +29560,7 @@ return array (
   'sau-3' => 
   array (
     'slug' => 'sau-3',
-    'name' => '한아 샘 홈바디케어',
+    'name' => '한아 샘 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -29896,7 +29896,7 @@ return array (
   'sanbon-2' => 
   array (
     'slug' => 'sanbon-2',
-    'name' => '새뜸 샘 홈케어',
+    'name' => '새뜸 샘 홈테라피',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -30234,7 +30234,7 @@ return array (
   'geumjeong-5' => 
   array (
     'slug' => 'geumjeong-5',
-    'name' => '담소 빛 홈케어',
+    'name' => '담소 빛 홈테라피',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -30329,7 +30329,7 @@ return array (
   'dang-2' => 
   array (
     'slug' => 'dang-2',
-    'name' => '아린 향 홈테라피',
+    'name' => '아린 향 홈바디케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -31149,7 +31149,7 @@ return array (
   'gyeongan-2' => 
   array (
     'slug' => 'gyeongan-2',
-    'name' => '리안 샘 홈바디케어',
+    'name' => '리안 샘 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -31632,7 +31632,7 @@ return array (
   'chowol-4' => 
   array (
     'slug' => 'chowol-4',
-    'name' => '모린 결 홈케어',
+    'name' => '모린 결 홈테라피',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -31776,7 +31776,7 @@ return array (
   'changjeon-3' => 
   array (
     'slug' => 'changjeon-3',
-    'name' => '가온 홈바디케어',
+    'name' => '가온 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -31968,7 +31968,7 @@ return array (
   'bubal-3' => 
   array (
     'slug' => 'bubal-3',
-    'name' => '채윤 숲 홈테라피',
+    'name' => '채윤 숲 홈바디케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -32016,7 +32016,7 @@ return array (
   'bubal-4' => 
   array (
     'slug' => 'bubal-4',
-    'name' => '맑은 숲 홈타이',
+    'name' => '맑은 숲 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -32353,7 +32353,7 @@ return array (
   'okjeong-3' => 
   array (
     'slug' => 'okjeong-3',
-    'name' => '정담 홈케어',
+    'name' => '정담 홈테라피',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -32833,7 +32833,7 @@ return array (
   'osan-jungang-4' => 
   array (
     'slug' => 'osan-jungang-4',
-    'name' => '유담 샘 홈바디케어',
+    'name' => '유담 샘 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -33703,7 +33703,7 @@ return array (
   'gyomun-5' => 
   array (
     'slug' => 'gyomun-5',
-    'name' => '맑은 향 홈타이',
+    'name' => '맑은 향 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -34041,7 +34041,7 @@ return array (
   'anseong-1-2' => 
   array (
     'slug' => 'anseong-1-2',
-    'name' => '소율 향 홈타이',
+    'name' => '소율 향 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -34235,7 +34235,7 @@ return array (
   'gongdo-3' => 
   array (
     'slug' => 'gongdo-3',
-    'name' => '바름 빛 홈케어',
+    'name' => '바름 빛 홈테라피',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -34813,7 +34813,7 @@ return array (
   'pocheon-dong-3' => 
   array (
     'slug' => 'pocheon-dong-3',
-    'name' => '바름 결 홈케어',
+    'name' => '바름 결 홈테라피',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -35103,7 +35103,7 @@ return array (
   'naeson-4' => 
   array (
     'slug' => 'naeson-4',
-    'name' => '한아 결 홈바디케어',
+    'name' => '한아 결 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -35296,7 +35296,7 @@ return array (
   'gocheon-3' => 
   array (
     'slug' => 'gocheon-3',
-    'name' => '맑은 뜰 홈타이',
+    'name' => '맑은 뜰 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -35391,7 +35391,7 @@ return array (
   'gocheon-5' => 
   array (
     'slug' => 'gocheon-5',
-    'name' => '나래 숲 홈테라피',
+    'name' => '나래 숲 홈바디케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -36114,7 +36114,7 @@ return array (
   'ganam-3' => 
   array (
     'slug' => 'ganam-3',
-    'name' => '노을 길 홈타이',
+    'name' => '노을 길 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -36162,7 +36162,7 @@ return array (
   'ganam-4' => 
   array (
     'slug' => 'ganam-4',
-    'name' => '해름 홈테라피',
+    'name' => '해름 홈바디케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -37467,7 +37467,7 @@ return array (
   'cheongpyeong-2' => 
   array (
     'slug' => 'cheongpyeong-2',
-    'name' => '나래 홈테라피',
+    'name' => '나래 홈바디케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -38142,7 +38142,7 @@ return array (
   'jeongok-2' => 
   array (
     'slug' => 'jeongok-2',
-    'name' => '미르 길 홈타이',
+    'name' => '미르 길 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -38190,7 +38190,7 @@ return array (
   'jeongok-3' => 
   array (
     'slug' => 'jeongok-3',
-    'name' => '유담 빛 홈바디케어',
+    'name' => '유담 빛 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -38334,7 +38334,7 @@ return array (
   'yeoncheon-eup-2' => 
   array (
     'slug' => 'yeoncheon-eup-2',
-    'name' => '비담 결 홈바디케어',
+    'name' => '비담 결 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -38429,7 +38429,7 @@ return array (
   'yeoncheon-eup-4' => 
   array (
     'slug' => 'yeoncheon-eup-4',
-    'name' => '예담 홈테라피',
+    'name' => '예담 홈바디케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -38477,7 +38477,7 @@ return array (
   'yeoncheon-eup-5' => 
   array (
     'slug' => 'yeoncheon-eup-5',
-    'name' => '채윤 향 홈테라피',
+    'name' => '채윤 향 홈바디케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -38862,7 +38862,7 @@ return array (
   'yeongjong-3' => 
   array (
     'slug' => 'yeongjong-3',
-    'name' => '나래 뜰 홈테라피',
+    'name' => '나래 뜰 홈바디케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -39054,7 +39054,7 @@ return array (
   'unseo-3' => 
   array (
     'slug' => 'unseo-3',
-    'name' => '예담 숲 홈테라피',
+    'name' => '예담 숲 홈바디케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -39392,7 +39392,7 @@ return array (
   'hwasu-3' => 
   array (
     'slug' => 'hwasu-3',
-    'name' => '아람 뜰 홈타이',
+    'name' => '아람 뜰 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -39731,7 +39731,7 @@ return array (
   'juan-3' => 
   array (
     'slug' => 'juan-3',
-    'name' => '해온 향 홈타이',
+    'name' => '해온 향 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -39973,7 +39973,7 @@ return array (
   'yonghyeon-4' => 
   array (
     'slug' => 'yonghyeon-4',
-    'name' => '담소 샘 홈케어',
+    'name' => '담소 샘 홈테라피',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -40309,7 +40309,7 @@ return array (
   'songdo-2' => 
   array (
     'slug' => 'songdo-2',
-    'name' => '하온 향 홈타이',
+    'name' => '하온 향 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -40356,7 +40356,7 @@ return array (
   'songdo-3' => 
   array (
     'slug' => 'songdo-3',
-    'name' => '차오 빛 홈바디케어',
+    'name' => '차오 빛 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -40452,7 +40452,7 @@ return array (
   'yeonsu-dong-2' => 
   array (
     'slug' => 'yeonsu-dong-2',
-    'name' => '솔담 숲 홈테라피',
+    'name' => '솔담 숲 홈바디케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -41128,7 +41128,7 @@ return array (
   'nonhyeon-ic-3' => 
   array (
     'slug' => 'nonhyeon-ic-3',
-    'name' => '정담 샘 홈케어',
+    'name' => '정담 샘 홈테라피',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -41176,7 +41176,7 @@ return array (
   'nonhyeon-ic-4' => 
   array (
     'slug' => 'nonhyeon-ic-4',
-    'name' => '아린 길 홈테라피',
+    'name' => '아린 길 홈바디케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -41561,7 +41561,7 @@ return array (
   'bupyeong-dong-3' => 
   array (
     'slug' => 'bupyeong-dong-3',
-    'name' => '솔담 향 홈테라피',
+    'name' => '솔담 향 홈바디케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -41609,7 +41609,7 @@ return array (
   'bupyeong-dong-4' => 
   array (
     'slug' => 'bupyeong-dong-4',
-    'name' => '하온 길 홈타이',
+    'name' => '하온 길 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -41899,7 +41899,7 @@ return array (
   'sipjeong-2' => 
   array (
     'slug' => 'sipjeong-2',
-    'name' => '초록 결 홈바디케어',
+    'name' => '초록 결 홈릴랙스',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -42333,7 +42333,7 @@ return array (
   'jakjeon-4' => 
   array (
     'slug' => 'jakjeon-4',
-    'name' => '서담 결 홈케어',
+    'name' => '서담 결 홈테라피',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -42381,7 +42381,7 @@ return array (
   'jakjeon-5' => 
   array (
     'slug' => 'jakjeon-5',
-    'name' => '하온 숲 홈타이',
+    'name' => '하온 숲 홈케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -42572,7 +42572,7 @@ return array (
   'cheongna-2' => 
   array (
     'slug' => 'cheongna-2',
-    'name' => '서담 홈케어',
+    'name' => '서담 홈테라피',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -42620,7 +42620,7 @@ return array (
   'cheongna-3' => 
   array (
     'slug' => 'cheongna-3',
-    'name' => '해름 뜰 홈테라피',
+    'name' => '해름 뜰 홈바디케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -43540,7 +43540,7 @@ return array (
   'yeongheung-2' => 
   array (
     'slug' => 'yeongheung-2',
-    'name' => '솔담 홈테라피',
+    'name' => '솔담 홈바디케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -43634,7 +43634,7 @@ return array (
   'baengnyeong-2' => 
   array (
     'slug' => 'baengnyeong-2',
-    'name' => '해름 길 홈테라피',
+    'name' => '해름 길 홈바디케어',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
@@ -43729,7 +43729,7 @@ return array (
   'deokjeok-2' => 
   array (
     'slug' => 'deokjeok-2',
-    'name' => '라온 빛 홈케어',
+    'name' => '라온 빛 홈테라피',
     'type' => 'home',
     'type_label' => '홈타이',
     'type_badge' => '홈타이 · 홈케어',
