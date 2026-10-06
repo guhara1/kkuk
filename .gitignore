@@ -6,6 +6,5 @@
 # 전체 프리뷰 빌드(--all)는 1,200여 파일/수십 MB라 저장소에 넣지 않는다.
 # 저장소에는 기본 샘플 빌드(74페이지)만 포함한다.
 
-# 정적 빌드 결과(약 41MB). Cloudflare Pages 를 Git 연동으로 쓰려면
-# 이 줄을 지우고 dist/ 를 커밋해야 한다. (docs/05 참고)
-dist/
+# dist/ 는 Cloudflare Pages 가 Git 연동으로 배포하는 대상이므로 커밋한다.
+# (Cloudflare 빌드 이미지에 PHP 가 없어 빌드를 로컬에서 수행한다 — docs/05 참고)

@@ -66,17 +66,20 @@ Cloudflare 대시보드 → Workers & Pages → **Create → Pages → Upload as
 npx wrangler pages deploy dist --project-name=kkuk
 ```
 
-### 2-2. Git 연동으로 배포
+### 2-2. Git 연동으로 배포 ← **이 저장소가 채택한 방식**
 
-Git 연동을 쓰려면 **빌드 결과(`dist/`)를 저장소에 커밋**해야 합니다.
-Cloudflare 가 PHP 를 실행하지 못하므로, 빌드는 로컬에서 하고 결과만 올리는 방식입니다.
+Cloudflare 가 PHP 를 실행하지 못하므로 빌드는 로컬에서 하고 결과만 올립니다.
+`dist/` 는 `.gitignore` 에서 제외돼 있어 **그대로 커밋**됩니다.
 
-`.gitignore` 에서 `dist/` 줄을 지운 뒤
+내용을 고친 뒤에는 아래 세 줄이면 재배포까지 끝납니다.
 
 ```bash
-php tools/build_static.php
+php tools/gen_data.php                                        # 시드를 고쳤을 때만
+KKUK_BASE="https://kkuk-ary.pages.dev" php tools/build_static.php
 git add dist && git commit -m "정적 빌드 갱신" && git push
 ```
+
+푸시하면 Cloudflare Pages 가 자동으로 새 배포를 올립니다.
 
 Cloudflare Pages 설정값
 
@@ -88,8 +91,8 @@ Cloudflare Pages 설정값
 | **빌드 출력 디렉터리** | **`dist`** |
 | 루트 디렉터리 | 비워 둠 (`/`) |
 
-> 내용을 고칠 때마다 41 MB 가 커밋되므로 저장소 이력이 빠르게 커집니다.
-> 자주 수정할 계획이면 2-1(직접 업로드)을 권합니다.
+> 내용을 고칠 때마다 변경된 파일만 커밋되지만, 전면 재생성 시에는 수십 MB 가 쌓입니다.
+> 이력이 너무 커지면 2-1(직접 업로드)로 바꾸고 `dist/` 를 다시 `.gitignore` 에 넣으면 됩니다.
 
 ### 3. 환경 변수
 

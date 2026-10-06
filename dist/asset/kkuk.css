@@ -1,0 +1,445 @@
+@charset "utf-8";
+/* ============================================================
+   kkuk-care · 디자인 시스템 (독자 설계 / v1.0)
+   설계 원칙
+   1) 시인성 우선 : 본문 17px / 행간 1.78 / 대비 AA(4.5:1) 이상만 사용
+   2) 라이트 퍼스트 : 업종 관행인 다크·네온 레이아웃과 의도적으로 분리
+   3) 편집 디자인 문법 : 실선 테두리 + 오프셋 그림자(그라데이션 남용 금지)
+   4) 모든 탭타깃 최소 48px, 주요 CTA 58px 이상
+   ============================================================ */
+
+/* ---------- 1. 토큰 ---------- */
+:root{
+  /* 지면 */
+  --paper:#FBF8F3;
+  --surface:#FFFFFF;
+  --surface-2:#F3EEE5;
+  --surface-3:#EAE2D5;
+
+  /* 글자 (paper 대비 : ink 15.8 / ink-2 8.3 / ink-3 5.3) */
+  --ink:#16130F;
+  --ink-2:#4C443A;
+  --ink-3:#6E6458;
+
+  /* 선 */
+  --line:#DED5C6;
+  --line-2:#C7BBA7;
+  --line-strong:#1C1813;
+
+  /* 브랜드 : 딥 티크 그린 (흰 배경 6.4:1) */
+  --brand:#0B6257;
+  --brand-2:#074840;
+  --brand-3:#053830;
+  --brand-tint:#E4F1ED;
+  --brand-tint-2:#CBE4DD;
+
+  /* 강조 : 번트 테라코타 (흰 배경 6.1:1) */
+  --accent:#A8411A;
+  --accent-2:#842F10;
+  --accent-tint:#FBE6DB;
+
+  --gold:#7A5C14;
+  --gold-tint:#F7EFD8;
+  --good:#16653F;
+  --focus:#1B6DD8;
+
+  --shadow:3px 3px 0 var(--line-strong);
+  --shadow-sm:2px 2px 0 var(--line-strong);
+  --shadow-lg:6px 6px 0 var(--line-strong);
+  --shadow-soft:0 10px 28px rgba(28,24,19,.10);
+
+  --r-sm:8px;
+  --r:14px;
+  --r-lg:20px;
+  --r-pill:999px;
+
+  --wrap:1180px;
+  --gap:clamp(14px,2.2vw,24px);
+
+  --font:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,
+         "Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;
+  --font-num:"Pretendard Variable",Pretendard,ui-monospace,"SF Mono",monospace;
+
+  --callbar-h:84px;
+}
+
+/* 다크 모드 : 시스템 설정 + 수동 토글(data-theme) 모두 지원 */
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#121110; --surface:#1A1816; --surface-2:#232019; --surface-3:#2C2820;
+    --ink:#F7F2E8; --ink-2:#C7BCAC; --ink-3:#9C9184;
+    --line:#39342C; --line-2:#4A4339; --line-strong:#000000;
+    --brand:#4FC2AF; --brand-2:#7FD8C8; --brand-3:#A6E6DA;
+    --brand-tint:#11302B; --brand-tint-2:#17423A;
+    --accent:#F2905C; --accent-2:#F7AE85; --accent-tint:#3A2114;
+    --gold:#DCBE72; --gold-tint:#332A14;
+    --good:#5FD39B; --focus:#7FB4FF;
+    --shadow:3px 3px 0 #000; --shadow-sm:2px 2px 0 #000; --shadow-lg:6px 6px 0 #000;
+    --shadow-soft:0 10px 28px rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#121110; --surface:#1A1816; --surface-2:#232019; --surface-3:#2C2820;
+  --ink:#F7F2E8; --ink-2:#C7BCAC; --ink-3:#9C9184;
+  --line:#39342C; --line-2:#4A4339; --line-strong:#000000;
+  --brand:#4FC2AF; --brand-2:#7FD8C8; --brand-3:#A6E6DA;
+  --brand-tint:#11302B; --brand-tint-2:#17423A;
+  --accent:#F2905C; --accent-2:#F7AE85; --accent-tint:#3A2114;
+  --gold:#DCBE72; --gold-tint:#332A14;
+  --good:#5FD39B; --focus:#7FB4FF;
+  --shadow:3px 3px 0 #000; --shadow-sm:2px 2px 0 #000; --shadow-lg:6px 6px 0 #000;
+  --shadow-soft:0 10px 28px rgba(0,0,0,.5);
+}
+
+/* ---------- 2. 리셋 ---------- */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:84px}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--font);font-size:17px;line-height:1.78;
+  letter-spacing:-.011em;word-break:keep-all;overflow-wrap:break-word;
+  -webkit-font-smoothing:antialiased;
+}
+img,svg{max-width:100%;height:auto;vertical-align:middle}
+a{color:var(--brand-2);text-decoration:none}
+a:hover{text-decoration:underline;text-underline-offset:3px}
+ul,ol{margin:0;padding:0;list-style:none}
+h1,h2,h3,h4{margin:0;line-height:1.3;letter-spacing:-.025em;font-weight:800}
+p{margin:0}
+button{font-family:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:4px}
+::selection{background:var(--brand);color:#fff}
+
+/* ---------- 3. 레이아웃 ---------- */
+.k-wrap{width:100%;max-width:var(--wrap);margin:0 auto;padding:0 clamp(14px,3.4vw,28px)}
+.k-main{padding-bottom:40px}
+.k-sect{margin:clamp(34px,5vw,60px) 0}
+.k-grid{display:grid;gap:var(--gap)}
+.k-cols-2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.k-cols-3{grid-template-columns:repeat(auto-fit,minmax(272px,1fr))}
+.k-cols-4{grid-template-columns:repeat(auto-fit,minmax(212px,1fr))}
+.k-split{display:grid;gap:var(--gap);grid-template-columns:minmax(0,1fr)}
+@media (min-width:1000px){.k-split{grid-template-columns:minmax(0,1fr) 330px}}
+
+/* ---------- 4. 타이포 ---------- */
+.k-h1{font-size:clamp(27px,4.6vw,42px);font-weight:900;letter-spacing:-.035em}
+.k-h2{font-size:clamp(21px,2.8vw,29px);font-weight:860;letter-spacing:-.03em}
+.k-h3{font-size:clamp(18px,2vw,21px);font-weight:800}
+.k-lead{font-size:clamp(16px,1.9vw,19px);color:var(--ink-2);line-height:1.8}
+.k-small{font-size:14.5px;color:var(--ink-3);line-height:1.7}
+.k-num{font-family:var(--font-num);font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
+
+/* 섹션 머리 : 좌측 색막대 + 타이틀 + 부제 */
+.k-shead{display:flex;align-items:flex-start;gap:13px;margin-bottom:18px}
+.k-shead__bar{flex:0 0 auto;width:6px;height:34px;border-radius:3px;background:var(--brand);margin-top:3px}
+.k-shead__t{display:block}
+.k-shead__sub{display:block;margin-top:3px;font-size:14.5px;font-weight:600;color:var(--ink-3)}
+
+/* ---------- 5. 헤더 ---------- */
+.k-head{
+  position:sticky;top:0;z-index:70;background:var(--surface);
+  border-bottom:2px solid var(--line-strong);
+}
+.k-head__in{display:flex;align-items:center;gap:12px;min-height:66px}
+.k-logo{display:flex;align-items:center;gap:9px;flex:0 0 auto;color:var(--ink);font-weight:900}
+.k-logo:hover{text-decoration:none}
+.k-logo__mark{flex:0 0 auto}
+.k-logo__txt{font-size:19px;letter-spacing:-.04em;line-height:1.15}
+.k-logo__txt small{display:block;font-size:11px;font-weight:700;color:var(--ink-3);letter-spacing:.04em}
+.k-head__nav{display:none;margin-left:auto;gap:4px}
+@media (min-width:861px){.k-head__nav{display:flex}}
+.k-head__nav a{
+  padding:10px 14px;border-radius:var(--r-pill);font-size:15.5px;font-weight:750;color:var(--ink-2);
+}
+.k-head__nav a:hover{background:var(--surface-2);color:var(--ink);text-decoration:none}
+.k-head__nav a[aria-current="page"]{background:var(--brand);color:#fff}
+.k-head__act{display:flex;align-items:center;gap:8px;margin-left:auto}
+@media (min-width:861px){.k-head__act{margin-left:10px}}
+.k-iconbtn{
+  display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;
+  border:2px solid var(--line-strong);border-radius:var(--r-sm);background:var(--surface);
+  color:var(--ink);cursor:pointer;box-shadow:var(--shadow-sm);
+}
+.k-iconbtn:active{transform:translate(2px,2px);box-shadow:none}
+/* 데스크톱 전화 버튼 */
+.k-head__tel{
+  display:none;align-items:center;gap:9px;padding:0 16px;height:46px;border-radius:var(--r-sm);
+  background:var(--accent);color:#fff;font-weight:850;font-size:15.5px;
+  border:2px solid var(--line-strong);box-shadow:var(--shadow-sm);
+}
+@media (min-width:861px){.k-head__tel{display:inline-flex}}
+.k-head__tel:hover{background:var(--accent-2);text-decoration:none;color:#fff}
+.k-head__tel b{font-family:var(--font-num);letter-spacing:.01em}
+
+/* ---------- 6. 지역 칩 네비 ---------- */
+.k-chips{display:flex;flex-wrap:wrap;gap:8px}
+.k-chips--scroll{
+  flex-wrap:nowrap;overflow-x:auto;padding-bottom:6px;
+  scrollbar-width:thin;-webkit-overflow-scrolling:touch;
+}
+.k-chip{
+  display:inline-flex;align-items:center;gap:7px;flex:0 0 auto;
+  min-height:44px;padding:8px 15px;border-radius:var(--r-pill);
+  border:2px solid var(--line-2);background:var(--surface);
+  color:var(--ink);font-size:15px;font-weight:750;
+}
+.k-chip:hover{border-color:var(--brand);background:var(--brand-tint);color:var(--brand-2);text-decoration:none}
+.k-chip[aria-current="page"],.k-chip--on{
+  background:var(--brand);border-color:var(--line-strong);color:#fff;box-shadow:var(--shadow-sm);
+}
+.k-chip__n{
+  font-family:var(--font-num);font-size:12.5px;font-weight:800;
+  padding:1px 7px;border-radius:var(--r-pill);background:var(--surface-2);color:var(--ink-2);
+}
+.k-chip[aria-current="page"] .k-chip__n,.k-chip--on .k-chip__n{background:rgba(255,255,255,.22);color:#fff}
+
+/* ---------- 7. 빵부스러기 ---------- */
+.k-bc{padding:14px 0 2px;font-size:14px;color:var(--ink-3)}
+.k-bc ol{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.k-bc li{display:flex;align-items:center;gap:6px}
+.k-bc li+li::before{content:"›";color:var(--line-2);font-weight:800}
+.k-bc a{color:var(--ink-2);font-weight:650}
+.k-bc [aria-current="page"]{color:var(--ink);font-weight:800}
+
+/* ---------- 8. 히어로 (텍스트 SVG) ---------- */
+.k-hero{margin:18px 0 0}
+.k-hero__box{
+  position:relative;border:2px solid var(--line-strong);border-radius:var(--r-lg);
+  overflow:hidden;box-shadow:var(--shadow-lg);background:var(--surface-2);line-height:0;
+}
+.k-hero__box svg{display:block;width:100%;height:clamp(236px,26vw,372px)}
+.k-hero__meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.k-hero__title{margin:20px 0 10px}
+.k-badge{
+  display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:var(--r-pill);
+  font-size:13.5px;font-weight:800;border:1.5px solid currentColor;
+}
+.k-badge--brand{color:var(--brand-2);background:var(--brand-tint)}
+.k-badge--accent{color:var(--accent-2);background:var(--accent-tint)}
+.k-badge--gold{color:var(--gold);background:var(--gold-tint)}
+.k-badge--ink{color:var(--ink-2);background:var(--surface-2)}
+
+/* ---------- 9. 카드 (공통) ---------- */
+.k-card{
+  background:var(--surface);border:2px solid var(--line-strong);border-radius:var(--r);
+  box-shadow:var(--shadow);transition:transform .14s ease,box-shadow .14s ease;
+}
+.k-card:hover{transform:translate(-2px,-2px);box-shadow:var(--shadow-lg)}
+.k-card__pad{padding:clamp(16px,2.2vw,22px)}
+.k-card--stack{display:flex;flex-direction:column}
+.k-card--stack .k-card__foot{margin-top:auto;padding-top:16px}
+
+/* ---------- 10. 업소 카드 ---------- */
+.k-shop{display:flex;flex-direction:column;overflow:hidden}
+.k-shop__thumb{position:relative;line-height:0;border-bottom:2px solid var(--line-strong);background:var(--surface-2);aspect-ratio:16/9}
+.k-shop__thumb svg{display:block;width:100%;height:100%}
+.k-shop__type{
+  position:absolute;top:10px;left:10px;padding:5px 11px;border-radius:var(--r-pill);
+  font-size:12.5px;font-weight:850;background:var(--ink);color:var(--paper);
+  border:1.5px solid var(--line-strong);
+}
+.k-shop__body{display:flex;flex-direction:column;gap:9px;padding:16px;flex:1 1 auto}
+.k-shop__name{font-size:18.5px;font-weight:860;letter-spacing:-.03em;color:var(--ink)}
+.k-shop__name a{color:inherit}
+.k-shop__where{display:flex;align-items:center;gap:5px;font-size:14px;font-weight:700;color:var(--brand-2)}
+.k-shop__desc{
+  font-size:14.8px;line-height:1.72;color:var(--ink-2);
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+}
+.k-shop__tags{display:flex;flex-wrap:wrap;gap:6px}
+.k-tag{
+  font-size:12.5px;font-weight:750;padding:3px 9px;border-radius:var(--r-sm);
+  background:var(--surface-2);color:var(--ink-2);border:1px solid var(--line)
+}
+.k-shop__foot{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin-top:auto;padding:12px 16px;border-top:1.5px dashed var(--line-2);background:var(--surface-2);
+}
+.k-price{font-size:13.5px;font-weight:700;color:var(--ink-3)}
+.k-price b{font-family:var(--font-num);font-size:17px;font-weight:900;color:var(--ink)}
+.k-rate{display:inline-flex;align-items:center;gap:5px;font-size:13.5px;font-weight:800;color:var(--gold)}
+.k-rate span{color:var(--ink-3);font-weight:650}
+
+/* ---------- 11. 본문 (고유 콘텐츠 1500자) ---------- */
+.k-article{
+  background:var(--surface);border:2px solid var(--line-strong);border-radius:var(--r);
+  box-shadow:var(--shadow);padding:clamp(20px,3vw,34px);
+}
+.k-article h2{
+  font-size:clamp(19px,2.3vw,24px);margin:30px 0 12px;padding-left:12px;
+  border-left:5px solid var(--brand);line-height:1.4;
+}
+.k-article h2:first-child{margin-top:0}
+.k-article h3{font-size:clamp(17px,1.9vw,19px);margin:22px 0 8px;color:var(--brand-2)}
+.k-article p{margin:0 0 15px;font-size:16.8px;line-height:1.85;color:var(--ink-2)}
+.k-article p strong{color:var(--ink);font-weight:800;
+  background:linear-gradient(transparent 62%,var(--brand-tint-2) 62%)}
+.k-article ul{margin:0 0 16px}
+.k-article li{
+  position:relative;padding-left:20px;margin-bottom:7px;font-size:16.5px;line-height:1.8;color:var(--ink-2);
+}
+.k-article li::before{
+  content:"";position:absolute;left:3px;top:13px;width:7px;height:7px;border-radius:2px;background:var(--accent);
+}
+.k-article .k-note{
+  margin:22px 0 0;padding:16px 18px;border-radius:var(--r-sm);
+  background:var(--brand-tint);border:1.5px solid var(--brand-tint-2);
+  font-size:15.5px;line-height:1.75;color:var(--brand-3)
+}
+:root[data-theme="dark"] .k-article .k-note{color:var(--brand-2)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .k-article .k-note{color:var(--brand-2)}}
+
+/* 표 (요금/시간) */
+.k-table{width:100%;border-collapse:collapse;margin:0 0 18px;font-size:15.5px}
+.k-table th,.k-table td{padding:11px 13px;border:1.5px solid var(--line);text-align:left}
+.k-table th{background:var(--surface-2);font-weight:800;color:var(--ink);white-space:nowrap}
+.k-table td{color:var(--ink-2)}
+.k-table td b{font-family:var(--font-num);color:var(--ink)}
+
+/* ---------- 12. AEO : 질문 아코디언 ---------- */
+.k-faq{display:grid;gap:10px}
+.k-faq details{
+  background:var(--surface);border:2px solid var(--line-strong);border-radius:var(--r);
+  box-shadow:var(--shadow-sm);overflow:hidden;
+}
+.k-faq summary{
+  display:flex;align-items:center;gap:11px;padding:16px 18px;cursor:pointer;
+  font-size:16.5px;font-weight:800;color:var(--ink);list-style:none;min-height:56px;
+}
+.k-faq summary::-webkit-details-marker{display:none}
+.k-faq summary::after{
+  content:"+";margin-left:auto;font-size:22px;font-weight:800;color:var(--brand);
+  transition:transform .18s ease;line-height:1;
+}
+.k-faq details[open] summary::after{transform:rotate(45deg)}
+.k-faq summary .k-q{
+  flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+  width:26px;height:26px;border-radius:7px;background:var(--brand);color:#fff;
+  font-size:14px;font-weight:900;
+}
+.k-faq__a{
+  padding:0 18px 18px 55px;font-size:16px;line-height:1.82;color:var(--ink-2);
+  border-top:1.5px dashed var(--line-2);padding-top:14px;margin-top:-2px;
+}
+
+/* ---------- 13. 내부링크 블록 (C-Rank 연결성) ---------- */
+.k-links{
+  background:var(--surface-2);border:2px solid var(--line);border-radius:var(--r);
+  padding:clamp(16px,2.2vw,22px);
+}
+.k-links__t{font-size:16px;font-weight:850;margin-bottom:12px;color:var(--ink)}
+.k-links__list{display:flex;flex-wrap:wrap;gap:8px}
+.k-links__list a{
+  display:inline-flex;align-items:center;min-height:40px;padding:6px 13px;
+  border-radius:var(--r-pill);background:var(--surface);border:1.5px solid var(--line-2);
+  font-size:14.5px;font-weight:700;color:var(--ink-2);
+}
+.k-links__list a:hover{border-color:var(--brand);color:var(--brand-2);text-decoration:none}
+
+/* ---------- 14. 사이드 (예약 패널) ---------- */
+.k-aside{display:grid;gap:var(--gap);align-content:start}
+@media (min-width:1000px){.k-aside{position:sticky;top:84px}}
+.k-panel{
+  background:var(--surface);border:2px solid var(--line-strong);border-radius:var(--r);
+  box-shadow:var(--shadow);overflow:hidden;
+}
+.k-panel__h{
+  padding:14px 18px;background:var(--brand);color:#fff;font-size:16px;font-weight:850;
+  border-bottom:2px solid var(--line-strong);
+}
+.k-panel__b{padding:18px}
+.k-dl{display:grid;gap:11px}
+.k-dl div{display:flex;gap:12px;align-items:baseline;font-size:15.5px}
+.k-dl dt{flex:0 0 76px;font-weight:800;color:var(--ink-3);font-size:14.5px}
+.k-dl dd{margin:0;font-weight:700;color:var(--ink);flex:1 1 auto}
+
+/* 큰 전화 CTA (본문/사이드) */
+.k-cta-tel{
+  display:flex;align-items:center;gap:13px;width:100%;min-height:68px;padding:12px 18px;
+  border:2px solid var(--line-strong);border-radius:var(--r);background:var(--accent);
+  color:#fff;box-shadow:var(--shadow);text-align:left;
+}
+.k-cta-tel:hover{background:var(--accent-2);color:#fff;text-decoration:none;transform:translate(-1px,-1px);box-shadow:var(--shadow-lg)}
+.k-cta-tel__ic{flex:0 0 auto;display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.2)}
+.k-cta-tel__tx{display:flex;flex-direction:column;line-height:1.28}
+.k-cta-tel__l1{font-size:13px;font-weight:750;opacity:.95}
+.k-cta-tel__l2{font-size:21px;font-weight:900;font-family:var(--font-num);letter-spacing:.01em}
+
+/* ---------- 15. 모바일 고정 전화연결 바 ---------- */
+.k-callbar{
+  display:none;position:fixed;left:0;right:0;bottom:0;z-index:95;gap:8px;
+  padding:10px clamp(8px,3vw,12px) calc(10px + env(safe-area-inset-bottom,0px));
+  background:var(--surface);border-top:2px solid var(--line-strong);
+  box-shadow:0 -8px 24px rgba(22,19,15,.18);
+}
+.k-callbar__tel{
+  flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:10px;min-height:58px;
+  padding:8px clamp(10px,3vw,14px);
+  border-radius:var(--r);background:var(--accent);color:#fff;border:2px solid var(--line-strong);
+  box-shadow:var(--shadow-sm);
+}
+.k-callbar__tel:hover,.k-callbar__tel:focus{color:#fff;text-decoration:none}
+.k-callbar__tel:active{transform:translate(2px,2px);box-shadow:none}
+.k-callbar__ic{flex:0 0 auto;display:grid;place-items:center;width:clamp(30px,8vw,34px);height:clamp(30px,8vw,34px);border-radius:50%;background:rgba(255,255,255,.22)}
+.k-callbar__tx{display:flex;flex-direction:column;line-height:1.25;min-width:0}
+.k-callbar__l1{font-size:12.5px;font-weight:750;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.k-callbar__l2{font-size:clamp(16px,4.7vw,19px);font-weight:900;font-family:var(--font-num);letter-spacing:0;white-space:nowrap}
+/* 아주 좁은 화면(≤359px)에서는 '전화연결' 접두어를 숨겨 번호가 잘리지 않게 한다 */
+@media (max-width:359px){.k-callbar__pre{display:none}}
+.k-callbar__sub{
+  flex:0 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  width:clamp(62px,17vw,74px);min-height:58px;border-radius:var(--r);background:var(--surface);
+  border:2px solid var(--line-strong);box-shadow:var(--shadow-sm);color:var(--ink);
+  font-size:12px;font-weight:800;
+}
+.k-callbar__sub:hover{background:var(--brand-tint);color:var(--brand-2);text-decoration:none}
+@media (max-width:860px){
+  .k-callbar{display:flex}
+  body{padding-bottom:var(--callbar-h)}
+}
+
+/* ---------- 16. 푸터 ---------- */
+.k-foot{
+  margin-top:50px;border-top:2px solid var(--line-strong);background:var(--surface-2);
+  padding:30px 0 34px;
+}
+.k-foot__grid{display:grid;gap:26px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.k-foot__t{font-size:15px;font-weight:850;margin-bottom:11px;color:var(--ink)}
+.k-foot__li a,.k-foot__li li{font-size:14.5px;line-height:2;color:var(--ink-2)}
+.k-foot__legal{
+  margin-top:26px;padding-top:18px;border-top:1.5px dashed var(--line-2);
+  font-size:13.5px;line-height:1.85;color:var(--ink-3)
+}
+.k-foot__legal b{color:var(--ink-2)}
+
+/* ---------- 17. 유틸 ---------- */
+.k-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.k-skip{
+  position:absolute;left:12px;top:-60px;z-index:200;padding:12px 18px;border-radius:var(--r-sm);
+  background:var(--ink);color:var(--paper);font-weight:800;transition:top .16s ease
+}
+.k-skip:focus{top:12px}
+.k-center{text-align:center}
+.k-mt{margin-top:var(--gap)}
+.k-empty{
+  padding:36px 20px;text-align:center;border:2px dashed var(--line-2);border-radius:var(--r);
+  color:var(--ink-3);font-size:15.5px;background:var(--surface)
+}
+.k-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:10px 20px;
+  border-radius:var(--r);border:2px solid var(--line-strong);background:var(--surface);
+  color:var(--ink);font-size:15.5px;font-weight:800;box-shadow:var(--shadow-sm);cursor:pointer
+}
+.k-btn:hover{background:var(--surface-2);text-decoration:none;color:var(--ink)}
+.k-btn--brand{background:var(--brand);color:#fff}
+.k-btn--brand:hover{background:var(--brand-2);color:#fff}
+.k-btn--block{width:100%}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+@media print{
+  .k-head,.k-callbar,.k-foot,.k-aside{display:none!important}
+  body{padding:0;background:#fff;color:#000}
+}
