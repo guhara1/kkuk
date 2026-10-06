@@ -23,6 +23,11 @@ require $ROOT . '/g5/plugin/kkuk/_common.php';
 require $ROOT . '/g5/plugin/kkuk/tpl/pages.php';
 
 $OUT = $ROOT . '/preview';
+
+/* 이전 빌드 잔여 파일 제거 — 샘플 범위가 바뀌면 옛 페이지가 남아 혼동을 준다 */
+if (is_dir($OUT)) {
+    foreach (glob($OUT . '/*.html') as $f) @unlink($f);
+}
 @mkdir($OUT, 0775, true);
 @mkdir($OUT . '/asset', 0775, true);
 copy($ROOT . '/g5/plugin/kkuk/asset/kkuk.css', $OUT . '/asset/kkuk.css');

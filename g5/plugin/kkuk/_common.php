@@ -12,7 +12,7 @@
  *    KKUK_BASE       : https://내도메인  (사이트맵·canonical 절대경로용)
  *    KKUK_BIZ_*      : 사업자 정보 (정보통신망법·전자상거래법 표기 의무)
  *    KKUK_NAVER_VERIFY / KKUK_GSC_VERIFY : 서치어드바이저·서치콘솔 소유확인
- *  ■ 전화번호는 요청 사양 그대로 고정되어 있다 (05082024749)
+ *  ■ 전화번호는 요청 사양 그대로 고정되어 있다 (050842603302)
  * ──────────────────────────────────────────────────────────
  */
 
@@ -25,8 +25,8 @@ if (!defined('_KKUK_BOOT_')) {
     if (!defined('KKUK_BASE'))      define('KKUK_BASE',      'https://kkuk-ary.pages.dev');
 
     /* ---- 전화 (고정) ---- */
-    if (!defined('KKUK_TEL'))      define('KKUK_TEL',      '05082024749');
-    if (!defined('KKUK_TEL_FMT'))  define('KKUK_TEL_FMT',  '050-8202-4749');
+    if (!defined('KKUK_TEL'))      define('KKUK_TEL',      '050842603302');
+    if (!defined('KKUK_TEL_FMT'))  define('KKUK_TEL_FMT',  '0508-4260-3302');
     /* 모바일 하단 바 · 모든 전화 CTA에 공통으로 붙는 문구 */
     if (!defined('KKUK_TEL_LABEL')) define('KKUK_TEL_LABEL', '출장마사지');
 

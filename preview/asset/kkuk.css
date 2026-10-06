@@ -433,8 +433,10 @@ button{font-family:inherit}
 .k-callbar__tx{display:flex;flex-direction:column;line-height:1.25;min-width:0}
 .k-callbar__l1{font-size:12.5px;font-weight:750;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .k-callbar__l2{font-size:clamp(16px,4.7vw,19px);font-weight:900;font-family:var(--font-num);letter-spacing:0;white-space:nowrap}
-/* 아주 좁은 화면(≤359px)에서는 '전화연결' 접두어를 숨겨 번호가 잘리지 않게 한다 */
-@media (max-width:359px){.k-callbar__pre{display:none}}
+/* 좁은 화면에서는 '전화연결' 접두어를 숨겨 번호가 잘리지 않게 한다.
+   기준폭은 번호 자릿수에 맞춰 잡는다 — 12자리(0508-4260-3302) 기준 439px.
+   접두어를 숨겨도 1행의 '출장마사지 · 홈타이' 문구는 그대로 남는다. */
+@media (max-width:439px){.k-callbar__pre{display:none}}
 .k-callbar__sub{
   flex:0 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
   width:clamp(62px,17vw,74px);min-height:58px;border-radius:var(--r);background:var(--surface);
