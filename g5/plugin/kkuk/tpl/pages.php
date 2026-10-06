@@ -261,7 +261,8 @@ function kkuk_page_gu($key) {
             . kkuk_e($d['name']) . '</a></h3>'
             . '<p class="k-small" style="margin:5px 0 9px"><span class="k-badge k-badge--brand">'
             . kkuk_e(kkuk_kind_label($d['kind'])) . '</span></p>'
-            . '<p class="k-small">' . kkuk_e(implode(' · ', $d['anchors'])) . '</p>'
+            . '<p class="k-small">' . kkuk_e($d['anchors'] ? implode(' · ', $d['anchors'])
+                                                             : $g['label'] . ' ' . $d['dir'] . ' · 약 ' . rtrim(rtrim(number_format($d['km2'], 1), '0'), '.') . '㎢') . '</p>'
             . '</article>';
     }
 
@@ -298,7 +299,7 @@ function kkuk_page_gu($key) {
     </section>
 
     <section class="k-sect">
-      <?= kkuk_shead('대표 행정동', '번호로 나뉘는 행정동은 대표 1곳만 수록했습니다') ?>
+      <?= kkuk_shead($g['label'] . ' 행정동', '번호로 나뉘는 행정동(○○1동·2동)은 대표 1곳으로 묶었습니다') ?>
       <?= kkuk_chips($dchips, '', true) ?>
       <div class="k-grid k-cols-3 k-mt"><?= $dcards ?></div>
     </section>
@@ -337,7 +338,7 @@ function kkuk_page_gu($key) {
             </dl>
           </div>
         </div>
-        <?= kkuk_links_block($g['label'] . ' 대표 행정동', array_map(fn($d) => [$d['name'], $d['url']], $dongs)) ?>
+        <?= kkuk_links_block($g['label'] . ' 행정동', array_map(fn($d) => [$d['name'], $d['url']], $dongs)) ?>
         <?= kkuk_links_block('인접 지역', $nearLinks) ?>
       </aside>
     </div>
@@ -364,10 +365,14 @@ function kkuk_page_dong($key) {
 
     $shops = kkuk_shops_of_dong($key);
 
+    $nbNames = [];
+    foreach ($d['nb_keys'] as $nk) { $x = kkuk_dong($nk); if ($x) $nbNames[] = $x['name']; }
+
     $ctx = [
         'seed' => $key, 'sido' => $g['sido_name'], 'gu' => $g['label'], 'dong' => $d['name'],
         'area' => $d['area'], 'anchors' => $d['anchors'], 'kind' => $d['kind'],
         'trait' => $d['kind'], 'siblings' => $d['siblings'],
+        'dir' => $d['dir'], 'km2' => $d['km2'], 'grade' => $d['grade'], 'neighbors' => $nbNames,
         'stations' => $g['stations'], 'marks' => $g['marks'], 'near' => $g['near'],
         'lines' => $g['lines'], 'dongs' => $d['siblings'],
         'blurb' => $g['blurb'], 'nshop' => count($shops), 'ndong' => $g['dong_count'],
@@ -388,12 +393,22 @@ function kkuk_page_dong($key) {
         'seed' => $key, 'kicker' => $g['label'] . ' · ' . kkuk_kind_label($d['kind']),
         'title' => $d['name'] . ' 마사지',
         'sub'   => '출장마사지 · 홈타이 · 로드샵',
-        'chips' => array_slice($d['anchors'], 0, 3),
+        'chips' => $d['anchors'] ? array_slice($d['anchors'], 0, 3)
+                                 : array_filter([kkuk_kind_label($d['kind']), $g['label'] . ' ' . $d['dir']]),
         'note'  => $d['area'],
     ]);
 
-    $sibLinks = [];
-    foreach ($d['sibling_keys'] as $sk) { $x = kkuk_dong($sk); if ($x) $sibLinks[] = [$x['name'], $x['url']]; }
+    // 경계가 맞닿은 실제 인접 행정동을 먼저 두고, 같은 구의 다른 동으로 채운다
+    $sibLinks = []; $seen = [];
+    foreach (array_merge($d['nb_keys'], $d['sibling_keys']) as $sk) {
+        if (isset($seen[$sk]) || $sk === $key) continue;
+        $x = kkuk_dong($sk);
+        if (!$x) continue;
+        $seen[$sk] = 1;
+        $label = $x['gu'] === $d['gu'] ? $x['name'] : (kkuk_gu($x['gu'])['label'] . ' ' . $x['name']);
+        $sibLinks[] = [$label, $x['url']];
+        if (count($sibLinks) >= 8) break;
+    }
     $nearLinks = [];
     foreach (kkuk_near_gu($d['gu']) as $n) $nearLinks[] = [$n['label'], $n['url']];
 
@@ -409,12 +424,16 @@ function kkuk_page_dong($key) {
       <div class="k-hero__title">
         <h1 class="k-h1"><?= kkuk_e($d['area']) ?> 마사지 · 출장마사지 · 홈타이</h1>
         <p class="k-lead" style="margin-top:12px">
-          <?= kkuk_e(implode(' · ', $d['anchors'])) ?> 기준으로 정리한 <?= kkuk_e($d['name']) ?>
-          <?= kkuk_e(kkuk_kind_label($d['kind'])) ?> 생활권 안내입니다.
+          <?php if ($d['anchors']): ?>
+            <?= kkuk_e(implode(' · ', $d['anchors'])) ?> 기준으로 정리한
+          <?php else: ?>
+            <?= kkuk_e($g['label']) ?> <?= kkuk_e($d['dir']) ?>에 자리한
+          <?php endif; ?>
+          <?= kkuk_e($d['name']) ?> <?= kkuk_e(kkuk_kind_label($d['kind'])) ?> 생활권 안내입니다.
           등록 업소의 접근 동선과 코스, 출장 가능 범위를 함께 확인하실 수 있습니다.</p>
       </div>
       <div class="k-hero__meta">
-        <span class="k-badge k-badge--brand"><?= kkuk_icon('pin', 14) ?> <?= kkuk_e($d['anchors'][0] ?? $d['name']) ?></span>
+        <span class="k-badge k-badge--brand"><?= kkuk_icon('pin', 14) ?> <?= kkuk_e($d['anchors'][0] ?? ($g['label'] . ' ' . $d['dir'])) ?></span>
         <span class="k-badge k-badge--gold"><?= kkuk_icon('check', 14) ?> <?= kkuk_e(kkuk_kind_label($d['kind'])) ?></span>
       </div>
     </section>
@@ -448,11 +467,15 @@ function kkuk_page_dong($key) {
             <dl class="k-dl" style="margin-top:16px">
               <div><dt>지역</dt><dd><?= kkuk_e($d['area']) ?></dd></div>
               <div><dt>성격</dt><dd><?= kkuk_e(kkuk_kind_label($d['kind'])) ?></dd></div>
+              <?php if ($d['anchors']): ?>
               <div><dt>기준점</dt><dd><?= kkuk_e(implode(', ', $d['anchors'])) ?></dd></div>
+              <?php endif; ?>
+              <div><dt>위치</dt><dd><?= kkuk_e($g['label']) ?> <?= kkuk_e($d['dir']) ?></dd></div>
+              <div><dt>면적</dt><dd>약 <?= kkuk_e(rtrim(rtrim(number_format($d['km2'], 1), '0'), '.')) ?>㎢</dd></div>
             </dl>
           </div>
         </div>
-        <?= kkuk_links_block($g['label'] . ' 다른 행정동', $sibLinks) ?>
+        <?= kkuk_links_block($g['label'] . ' 인접·주변 행정동', $sibLinks) ?>
         <?= kkuk_links_block('인접 지역', $nearLinks) ?>
       </aside>
     </div>
@@ -579,7 +602,11 @@ function kkuk_page_shop($slug) {
             <dl class="k-dl" style="margin-top:16px">
               <div><dt>업종</dt><dd><?= kkuk_e($x['type_label']) ?></dd></div>
               <div><dt>지역</dt><dd><?= kkuk_e($d['area']) ?></dd></div>
+              <?php if ($d['anchors']): ?>
               <div><dt>기준점</dt><dd><?= kkuk_e(implode(', ', $d['anchors'])) ?></dd></div>
+              <?php endif; ?>
+              <div><dt>위치</dt><dd><?= kkuk_e($g['label']) ?> <?= kkuk_e($d['dir']) ?></dd></div>
+              <div><dt>면적</dt><dd>약 <?= kkuk_e(rtrim(rtrim(number_format($d['km2'], 1), '0'), '.')) ?>㎢</dd></div>
               <div><dt>운영</dt><dd><?= kkuk_e($x['hours']) ?></dd></div>
               <div><dt>최저</dt><dd><?= number_format($x['price_from']) ?>원 (<?= (int)$x['courses'][0]['min'] ?>분)</dd></div>
             </dl>

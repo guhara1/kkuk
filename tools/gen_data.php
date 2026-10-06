@@ -20,6 +20,9 @@ $W = require $ROOT . '/tools/seed/shop_words.php';
    --------------------------------------------------------- */
 $sido = []; $gus = []; $dongs = [];
 
+$DONGS   = require $ROOT . '/tools/seed/dongs.php';         // 행정동 전수(자동 생성)
+$ANCHORS = require $ROOT . '/tools/seed/dong_anchors.php';  // 동별 앵커(수기)
+
 foreach (['seoul', 'gyeonggi', 'incheon'] as $file) {
     $seed = require $ROOT . "/tools/seed/{$file}.php";
 
@@ -30,24 +33,25 @@ foreach (['seoul', 'gyeonggi', 'incheon'] as $file) {
         'url' => "/{$sSlug}/", 'gu' => [],
     ];
 
-    foreach ($seed['gu'] as $row) {
-        $meta = array_shift($row);
-        $f = explode('|', $meta);
-        $f = array_pad($f, 11, '');
-        [$gName, $gSlug, $gLat, $gLng, $lines, $stations, $marks, $trait, $near, $blurb, $city] = $f;
+    foreach ($seed['gu'] as $meta) {
+        $f = array_pad(explode('|', $meta), 12, '');
+        [$gName, $gSlug, $gLat, $gLng, $lines, $stations, $marks,
+         $trait, $near, $blurb, $city, $former] = $f;
 
-        $gKey = "{$sSlug}/{$gSlug}";
+        $gKey  = "{$sSlug}/{$gSlug}";
         $label = $city !== '' ? "{$city} {$gName}" : $gName;
+        $dsKey = $sSlug . '|' . ($city !== '' ? $city . $gName : $gName);  // dongs.php 키
 
         $gus[$gKey] = [
             'key'      => $gKey,
             'sido'     => $sSlug,
             'sido_name'=> $sName,
             'name'     => $gName,
-            'label'    => $label,                       // 화면 표기 (경기 일반구는 '수원시 영통구')
+            'label'    => $label,                       // 경기 일반구는 '수원시 영통구'
             'city'     => $city,
+            'former'   => $former,                      // 2026 개편 전 명칭(검색 수요 보완)
             'slug'     => $gSlug,
-            'area'     => trim("{$sName} {$label}"),    // 콘텐츠용 전체 지역명
+            'area'     => trim("{$sName} {$label}"),
             'lat'      => (float)$gLat,
             'lng'      => (float)$gLng,
             'lines'    => array_values(array_filter(explode(',', $lines))),
@@ -61,41 +65,78 @@ foreach (['seoul', 'gyeonggi', 'incheon'] as $file) {
         ];
         $sido[$sSlug]['gu'][] = $gKey;
 
-        // 대표 행정동
-        $names = [];
-        foreach ($row as $drow) {
-            $d = array_pad(explode('|', $drow), 4, '');
-            [$dName, $dSlug, $dKind, $anchors] = $d;
-            $names[] = $dName;
+        if (!isset($DONGS[$dsKey])) {
+            fwrite(STDERR, "  ! 행정동 데이터 없음 : {$dsKey}\n");
+            continue;
+        }
+
+        foreach ($DONGS[$dsKey] as $drow) {
+            $d = array_pad(explode('|', $drow), 9, '');
+            [$dName, $dSlug, $dKind, $dLat, $dLng, $dKm2, $dGrade, $dDir, $dNb] = $d;
             $dKey = "{$gKey}/{$dSlug}";
 
-            // 동 좌표 : 구청 좌표에서 결정론적 미세 오프셋(±0.012°). 운영 전 실측값 교체 권장.
-            $ox = (kkuk_hash($dKey . 'x') % 2401 - 1200) / 100000;
-            $oy = (kkuk_hash($dKey . 'y') % 2401 - 1200) / 100000;
+            // 수기 앵커가 있으면 쓰고, 없으면 비워 둔다.
+            // (비면 콘텐츠 엔진이 인접 행정동·방위·면적 기반 문장으로 대체한다)
+            $anchors = [];
+            if (!empty($ANCHORS["{$sSlug}/{$dName}"])) {
+                $anchors = array_values(array_filter(explode(',', $ANCHORS["{$sSlug}/{$dName}"])));
+            }
 
             $dongs[$dKey] = [
-                'key'     => $dKey,
-                'sido'    => $sSlug,
-                'gu'      => $gKey,
-                'name'    => $dName,
-                'slug'    => $dSlug,
-                'kind'    => $dKind,
-                'anchors' => array_values(array_filter(explode(',', $anchors))),
-                'area'    => trim("{$sName} {$label} {$dName}"),
-                'lat'     => round((float)$gLat + $oy, 6),
-                'lng'     => round((float)$gLng + $ox, 6),
-                'url'     => "/{$sSlug}/{$gSlug}/{$dSlug}/",
-                'shops'   => [],
+                'key'      => $dKey,
+                'sido'     => $sSlug,
+                'gu'       => $gKey,
+                'name'     => $dName,
+                'slug'     => $dSlug,
+                'kind'     => $dKind,
+                'anchors'  => $anchors,
+                'area'     => trim("{$sName} {$label} {$dName}"),
+                'lat'      => (float)$dLat,
+                'lng'      => (float)$dLng,
+                'km2'      => (float)$dKm2,
+                'grade'    => $dGrade,                   // dense / mid / wide / vast
+                'dir'      => $dDir,                     // 구 안에서의 방위
+                'nb_names' => array_values(array_filter(explode(',', $dNb))),
+                'url'      => "/{$sSlug}/{$gSlug}/{$dSlug}/",
+                'shops'    => [],
             ];
             $gus[$gKey]['dongs'][] = $dKey;
         }
-        // 형제 동(인접 동 내부링크용)
-        foreach ($gus[$gKey]['dongs'] as $i => $dKey) {
-            $sib = $names; unset($sib[$i]);
-            $dongs[$dKey]['siblings'] = array_values($sib);
-            $dongs[$dKey]['sibling_keys'] = array_values(array_diff($gus[$gKey]['dongs'], [$dKey]));
-        }
     }
+}
+
+/* 형제 동(같은 구) — 내부링크·본문용으로 최대 4곳을 해시로 고른다 */
+foreach ($gus as $gKey => $g) {
+    foreach ($g['dongs'] as $dKey) {
+        $others = array_values(array_diff($g['dongs'], [$dKey]));
+        usort($others, fn($a, $b) => kkuk_hash($dKey . '|sib|' . $a) <=> kkuk_hash($dKey . '|sib|' . $b));
+        $pick = array_slice($others, 0, 4);
+        $dongs[$dKey]['sibling_keys'] = $pick;
+        $dongs[$dKey]['siblings'] = array_map(fn($k) => $dongs[$k]['name'], $pick);
+    }
+}
+
+/* 인접 행정동 이름 → 키 해석 (경계가 맞닿은 실제 이웃. 구 경계를 넘는 경우도 포함) */
+$byName = [];
+foreach ($dongs as $k => $d) {
+    $g = $gus[$d['gu']];
+    $byName[$d['sido'] . '|' . $g['name'] . '|' . $d['name']] = $k;
+    $byName[$d['sido'] . '|' . $d['name']] = $k;        // 같은 구 안 참조용
+}
+foreach ($dongs as $k => $d) {
+    $g = $gus[$d['gu']];
+    $keys = [];
+    foreach ($d['nb_names'] as $n) {
+        $n = trim($n);
+        if (strpos($n, ' ') !== false) {                 // '서초구 반포동'
+            [$gn, $dn] = explode(' ', $n, 2);
+            $cand = $d['sido'] . '|' . $gn . '|' . $dn;
+        } else {
+            $cand = $d['sido'] . '|' . $g['name'] . '|' . $n;
+        }
+        if (isset($byName[$cand])) $keys[] = $byName[$cand];
+    }
+    $dongs[$k]['nb_keys'] = array_values(array_unique($keys));
 }
 
 /* ---------------------------------------------------------
@@ -115,12 +156,17 @@ function base_price(string $trait, string $sido): int {
     return (int)(round($b / 1000) * 1000);
 }
 
-/** 동 성격에 따른 업소 수 */
-function shop_count(string $kind, string $guSlug, string $key): int {
+/**
+ * 동별 업소 수 — 면적 등급(실측)과 성격을 함께 본다.
+ * 조밀한 역세권일수록 많고, 면적이 넓은 외곽·농촌 지역일수록 적게 둔다.
+ */
+function shop_count(string $kind, string $grade, string $guSlug, string $key): int {
     if ($guSlug === 'ongjin') return 2;                       // 도서 지역 : 출장 전용 소수
-    if (in_array($kind, ['st', 'of', 'ind', 'ap'], true))         $range = [4, 5];
-    elseif (in_array($kind, ['md', 'uni', 'nt', 'mixed'], true))  $range = [3, 4];
-    else                                                          $range = [2, 3];   // rs, tr
+    if ($grade === 'vast')                                        $range = [1, 2];
+    elseif ($grade === 'wide')                                    $range = [2, 3];
+    elseif (in_array($kind, ['st', 'of', 'ind'], true))           $range = [3, 4];
+    elseif (in_array($kind, ['ap', 'md', 'uni', 'nt', 'mixed'], true)) $range = [2, 4];
+    else                                                          $range = [2, 3];
     return $range[0] + kkuk_pick($key, $range[1] - $range[0] + 1, 'cnt');
 }
 
@@ -138,7 +184,7 @@ $usedNames = [];
 
 foreach ($dongs as $dKey => $d) {
     $gu = $gus[$d['gu']];
-    $n  = shop_count($d['kind'], $gu['slug'], $dKey);
+    $n  = shop_count($d['kind'], $d['grade'], $gu['slug'], $dKey);
     $bp = base_price($gu['trait'], $gu['sido']);
 
     for ($i = 0; $i < $n; $i++) {
@@ -194,20 +240,24 @@ foreach ($dongs as $dKey => $d) {
         $vars = [
             'AREA' => $d['area'], 'DONG' => $d['name'], 'GU' => $gu['label'],
             'LABEL' => $tm['label'], 'HOURS' => $hours, 'TEL_FMT' => TEL_FMT,
-            'A1' => $d['anchors'][0] ?? $d['name'],
-            'A2' => $d['anchors'][1] ?? ($d['anchors'][0] ?? $d['name']),
-            'A3' => $d['anchors'][2] ?? ($d['anchors'][0] ?? $d['name']),
+            'A1' => $d['anchors'][0] ?? ($d['name'] . ' 일대'),
+            'A2' => $d['anchors'][1] ?? ($d['anchors'][0] ?? ($d['name'] . ' 일대')),
+            'A3' => $d['anchors'][2] ?? ($d['anchors'][0] ?? ($d['name'] . ' 일대')),
             'C1' => $courses[0]['name'], 'C2' => $courses[1]['name'], 'C3' => $courses[2]['name'],
             'M1' => (string)$courses[0]['min'], 'M2' => (string)$courses[1]['min'], 'M3' => (string)$courses[2]['min'],
         ];
 
-        $tagline = kkuk_render(kkuk_one($W['tagline'][$type], $k, 'tl'), $vars);
+        // 앵커(역·시장 등)가 있는 동은 앵커 문형, 없는 동은 지역명만 쓰는 문형을 쓴다.
+        $hasAnchor = !empty($d['anchors']);
+        $tlSet  = $hasAnchor ? $W['tagline'][$type]    : $W['tagline_na'][$type];
+        $locSet = $hasAnchor ? $W['desc']['loc'][$type] : $W['desc']['loc_na'][$type];
+        $tagline = kkuk_render(kkuk_one($tlSet, $k, 'tl'), $vars);
 
         /* -- 상세 디스크립션 --
            로드샵·스파 : loc → course → bridge(출장 마사지 + 홈타이 필수) → close
            출장·홈타이 : loc → course → policy → close                                */
         $parts = [
-            kkuk_render(kkuk_one($W['desc']['loc'][$type], $k, 'dl'), $vars),
+            kkuk_render(kkuk_one($locSet, $k, 'dl'), $vars),
             kkuk_render(kkuk_one($W['desc']['course'],      $k, 'dc'), $vars),
             in_array($type, ['road', 'spa'], true)
                 ? kkuk_render(kkuk_one($W['desc']['bridge'], $k, 'db'), $vars)

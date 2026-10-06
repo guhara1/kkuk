@@ -54,9 +54,12 @@ foreach (kkuk_gu_all() as $key => $g) {
 
 foreach (kkuk_dong_all() as $key => $d) {
     $g = kkuk_gu($d['gu']);
+    $nbNames = [];
+    foreach ($d['nb_keys'] as $nk) { $x = kkuk_dong($nk); if ($x) $nbNames[] = $x['name']; }
     $ctx = ['seed' => $key, 'sido' => $g['sido_name'], 'gu' => $g['label'], 'dong' => $d['name'],
             'area' => $d['area'], 'anchors' => $d['anchors'], 'kind' => $d['kind'],
             'trait' => $d['kind'], 'siblings' => $d['siblings'],
+            'dir' => $d['dir'], 'km2' => $d['km2'], 'grade' => $d['grade'], 'neighbors' => $nbNames,
             'stations' => $g['stations'], 'marks' => $g['marks'], 'near' => $g['near'],
             'lines' => $g['lines'], 'dongs' => $d['siblings'], 'blurb' => $g['blurb'],
             'nshop' => count($d['shops']), 'ndong' => $g['dong_count'], 'tel_fmt' => KKUK_TEL_FMT];
