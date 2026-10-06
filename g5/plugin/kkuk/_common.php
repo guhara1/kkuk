@@ -37,7 +37,7 @@ if (!defined('_KKUK_BOOT_')) {
     if (!defined('KKUK_BIZ_ADDR'))  define('KKUK_BIZ_ADDR',  '(사업장 주소)');
 
     /* ---- 검색엔진 소유확인 (값이 비면 메타를 출력하지 않는다) ---- */
-    if (!defined('KKUK_NAVER_VERIFY')) define('KKUK_NAVER_VERIFY', '');
+    if (!defined('KKUK_NAVER_VERIFY')) define('KKUK_NAVER_VERIFY', 'c975872febf5e03f490c9f4941b9df026f57a565');
     if (!defined('KKUK_GSC_VERIFY'))   define('KKUK_GSC_VERIFY',   '');
 
     /* ---- 경로 ---- */
