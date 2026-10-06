@@ -1,0 +1,6 @@
+@charset "utf-8";
+/* 모바일 전용 보정 — 레이아웃은 반응형으로 처리되므로 최소한만 둔다 */
+.tbl_head01 th, .tbl_head01 td { padding: 11px 8px; font-size: 15px; }
+#bo_v_con { font-size: 17px; }
+/* 고정 전화연결 바에 가리지 않도록 하단 여백 확보 */
+body { padding-bottom: var(--callbar-h, 84px); }

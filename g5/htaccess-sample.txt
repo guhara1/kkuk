@@ -1,0 +1,39 @@
+# ===========================================================
+#  그누보드5 루트 .htaccess 에 추가 (Apache + mod_rewrite)
+#  파일명을 .htaccess 로 바꾸거나, 기존 .htaccess 하단에 붙여 넣는다.
+# ===========================================================
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # 1) 실제로 존재하는 파일·디렉터리는 그대로 처리 (index.php, /bbs/ 등)
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # 2) 그누보드 기본 경로는 라우터를 태우지 않는다
+  RewriteRule ^(bbs|adm|plugin|data|skin|theme|js|css|img|extend|lib|mobile|api)(/|$) - [L]
+
+  # 3) SEO 산출물
+  RewriteRule ^robots\.txt$  plugin/kkuk/robots.php  [L]
+  RewriteRule ^sitemap\.xml$ plugin/kkuk/sitemap.php [L]
+  RewriteRule ^rss\.xml$     plugin/kkuk/rss.php     [L]
+
+  # 4) 지역·업소 주소를 플러그인 라우터로
+  #    /seoul/ /seoul/gangnam/ /seoul/gangnam/yeoksam/ /shop/yeoksam-1/ /search/
+  RewriteRule ^(.*)$ plugin/kkuk/index.php?r=$1 [QSA,L]
+</IfModule>
+
+# ===========================================================
+#  Nginx 를 쓰는 경우 server 블록에 아래를 추가
+# ===========================================================
+#  location = /robots.txt  { rewrite ^ /plugin/kkuk/robots.php  last; }
+#  location = /sitemap.xml { rewrite ^ /plugin/kkuk/sitemap.php last; }
+#  location = /rss.xml     { rewrite ^ /plugin/kkuk/rss.php     last; }
+#
+#  location / {
+#      try_files $uri $uri/ @kkuk;
+#  }
+#  location @kkuk {
+#      rewrite ^/(.*)$ /plugin/kkuk/index.php?r=$1 last;
+#  }
