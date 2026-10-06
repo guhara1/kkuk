@@ -189,6 +189,27 @@ foreach (array_keys(kkuk_sitemap_parts()) as $part) {
     $bytes += put($OUT . "/sitemap-{$part}.xml", kkuk_sitemap_xml($part));
 }
 
+/* 파비콘 — 루트에 둔다. favicon.ico 는 링크가 없어도 브라우저가 루트에서 찾는다. */
+$iconSrc = $ROOT . '/g5/plugin/kkuk/asset';
+copy($iconSrc . '/favicon.svg', $OUT . '/favicon.svg');
+foreach (['favicon.ico', 'apple-touch-icon.png', 'icon-192.png', 'icon-512.png'] as $f) {
+    copy($iconSrc . '/icons/' . $f, $OUT . '/' . $f);
+}
+$bytes += put($OUT . '/site.webmanifest', json_encode([
+    'name'             => KKUK_BRAND,
+    'short_name'       => KKUK_BRAND,
+    'lang'             => 'ko',
+    'start_url'        => '/',
+    'display'          => 'standalone',
+    'background_color' => '#FBF8F3',
+    'theme_color'      => '#0B6257',
+    'icons' => [
+        ['src' => '/icon-192.png', 'sizes' => '192x192', 'type' => 'image/png'],
+        ['src' => '/icon-512.png', 'sizes' => '512x512', 'type' => 'image/png',
+         'purpose' => 'any maskable'],
+    ],
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+
 /* IndexNow 키 파일 (빙·얀덱스 등 즉시 통보용. 네이버·구글은 미지원) */
 $indexnowKey = substr(hash('sha256', KKUK_BASE . '|kkuk-indexnow'), 0, 32);
 $bytes += put($OUT . "/{$indexnowKey}.txt", $indexnowKey . "\n");
@@ -197,6 +218,15 @@ $headers = <<<TXT
 # 정적 자산 : 파일명에 버전 쿼리를 붙이므로 장기 캐시 가능
 /asset/*
   Cache-Control: public, max-age=31536000, immutable
+
+/*.png
+  Cache-Control: public, max-age=604800
+
+/favicon.ico
+  Cache-Control: public, max-age=604800
+
+/favicon.svg
+  Cache-Control: public, max-age=604800
 
 /img/shop/*
   Cache-Control: public, max-age=604800

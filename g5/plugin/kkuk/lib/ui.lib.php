@@ -32,6 +32,10 @@ function kkuk_doc_open(array $p) {
 <meta name="format-detection" content="telephone=yes">
 <meta name="theme-color" content="#0B6257" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#121110" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
 <?= kkuk_head_tags($p) ?>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">

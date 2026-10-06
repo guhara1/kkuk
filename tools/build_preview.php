@@ -32,6 +32,8 @@ if (is_dir($OUT)) {
 @mkdir($OUT . '/asset', 0775, true);
 copy($ROOT . '/g5/plugin/kkuk/asset/kkuk.css', $OUT . '/asset/kkuk.css');
 copy($ROOT . '/g5/plugin/kkuk/asset/kkuk.js',  $OUT . '/asset/kkuk.js');
+copy($ROOT . '/g5/plugin/kkuk/asset/favicon.svg', $OUT . '/favicon.svg');
+@copy($ROOT . '/g5/plugin/kkuk/asset/icons/favicon.ico', $OUT . '/favicon.ico');
 
 /* ---------------------------------------------------------
    1. URL → 평면 파일명
