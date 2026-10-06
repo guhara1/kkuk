@@ -61,6 +61,11 @@ function kkuk_palette($seed) {
     return $p[kkuk_pick($seed, count($p), 'pal')];
 }
 
+/** 생성된 SVG의 들여쓰기·줄바꿈을 줄인다(페이지 용량 절감). 텍스트 노드는 건드리지 않는다. */
+function kkuk_svg_min($s) {
+    return preg_replace('/>\s*\n\s*</', '><', preg_replace('/\n\s+/', ' ', $s));
+}
+
 /** SVG 내부에서 쓰는 공통 폰트 스택 */
 function kkuk_svg_font() {
     return "'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif";
@@ -146,7 +151,7 @@ function kkuk_hero_svg(array $o) {
 
     $deco = kkuk_hero_deco($v, $p, $uid);
 
-    return '<svg class="k-hero__svg" viewBox="0 0 1200 420" role="img" xmlns="http://www.w3.org/2000/svg"
+    return kkuk_svg_min('<svg class="k-hero__svg" viewBox="0 0 1200 420" role="img" xmlns="http://www.w3.org/2000/svg"
      preserveAspectRatio="xMidYMid slice" aria-label="'.kkuk_e(trim($kicker.' '.$title.' '.$sub)).'">
   <defs>
     <pattern id="dot'.$uid.'" width="26" height="26" patternUnits="userSpaceOnUse">
@@ -187,7 +192,7 @@ function kkuk_hero_svg(array $o) {
   '.$chipSvg.'
   <text class="k-hs-n" x="600" y="391" text-anchor="middle" font-size="20"
         fill="'.$p['c'].'" fill-opacity=".66">'.kkuk_e($note).'</text>
-</svg>';
+</svg>');
 }
 
 /**
@@ -221,7 +226,7 @@ function kkuk_shop_svg(array $o) {
                           <rect x="560" y="0" width="240" height="150" fill="url(#sd'.$uid.')" opacity=".4"/>'; break;
     }
 
-    return '<svg viewBox="0 0 800 450" role="img" xmlns="http://www.w3.org/2000/svg"
+    return kkuk_svg_min('<svg viewBox="0 0 800 450" role="img" xmlns="http://www.w3.org/2000/svg"
      preserveAspectRatio="xMidYMid slice" aria-label="'.kkuk_e($name.' '.$type.' 이미지').'">
   <defs>
     <pattern id="sd'.$uid.'" width="22" height="22" patternUnits="userSpaceOnUse">
@@ -241,7 +246,7 @@ function kkuk_shop_svg(array $o) {
   <text class="k-ss-n" x="52" y="322" font-size="'.$nfs.'" fill="'.$p['tx'].'">'.kkuk_e($name).'</text>
   <line x1="54" y1="352" x2="150" y2="352" stroke="'.$p['b'].'" stroke-width="5" stroke-linecap="round"/>
   <text class="k-ss-s" x="52" y="398" font-size="25" fill="'.$p['c'].'" fill-opacity=".72">'.kkuk_e($where).'</text>
-</svg>';
+</svg>');
 }
 
 /** 헤더 로고 마크 (상호 미확정 상태이므로 심볼만 고정, 워드마크는 설정값으로 교체) */

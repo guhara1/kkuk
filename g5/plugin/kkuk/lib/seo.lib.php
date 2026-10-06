@@ -198,8 +198,9 @@ function kkuk_jsonld(array $p) {
         $g[] = ['@type' => 'FAQPage', '@id' => $url . '#faq', 'mainEntity' => $qa];
     }
 
+    // 들여쓰기 없이 출력한다(페이지당 4KB 안팎 절약 — 전체 1,220페이지 기준 효과가 크다)
     $json = json_encode(['@context' => 'https://schema.org', '@graph' => $g],
-        JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+        JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     return '<script type="application/ld+json">' . $json . "</script>\n";
 }
 

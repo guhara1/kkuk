@@ -106,24 +106,21 @@ const TEL_FMT  = '050-8202-4749';
 
 /** 구 성격 + 시도로 60분 기준 단가를 정한다 */
 function base_price(string $trait, string $sido): int {
-    $b = match ($trait) {
-        'of', 'office', 'nt' => 90000,
-        'st', 'mixed', 'ap'  => 75000,
-        'tr'                 => 70000,
-        default              => 65000,
-    };
-    $b = (int)round($b * match ($sido) { 'seoul' => 1.10, 'incheon' => 0.95, default => 1.0 });
+    if (in_array($trait, ['of', 'office', 'nt'], true))      $b = 90000;
+    elseif (in_array($trait, ['st', 'mixed', 'ap'], true))    $b = 75000;
+    elseif ($trait === 'tr')                                  $b = 70000;
+    else                                                      $b = 65000;
+    $m = ($sido === 'seoul') ? 1.10 : (($sido === 'incheon') ? 0.95 : 1.0);
+    $b = (int)round($b * $m);
     return (int)(round($b / 1000) * 1000);
 }
 
 /** 동 성격에 따른 업소 수 */
 function shop_count(string $kind, string $guSlug, string $key): int {
     if ($guSlug === 'ongjin') return 2;                       // 도서 지역 : 출장 전용 소수
-    $range = match ($kind) {
-        'st', 'of', 'ind', 'ap' => [4, 5],
-        'md', 'uni', 'nt', 'mixed' => [3, 4],
-        default => [2, 3],                                     // rs, tr
-    };
+    if (in_array($kind, ['st', 'of', 'ind', 'ap'], true))         $range = [4, 5];
+    elseif (in_array($kind, ['md', 'uni', 'nt', 'mixed'], true))  $range = [3, 4];
+    else                                                          $range = [2, 3];   // rs, tr
     return $range[0] + kkuk_pick($key, $range[1] - $range[0] + 1, 'cnt');
 }
 
@@ -221,7 +218,7 @@ foreach ($dongs as $dKey => $d) {
 
         // 안전장치 : 로드샵/스파 디스크립션에 두 키워드가 반드시 있어야 한다
         if (in_array($type, ['road', 'spa'], true)) {
-            if (!str_contains($desc, '출장 마사지') || !str_contains($desc, '홈타이')) {
+            if (mb_strpos($desc, '출장 마사지') === false || mb_strpos($desc, '홈타이') === false) {
                 $desc .= ' 매장 방문 외 출장 마사지와 홈타이도 함께 운영합니다.';
             }
         }
@@ -288,7 +285,9 @@ $byType = [];
 foreach ($shops as $s) $byType[$s['type_label']] = ($byType[$s['type_label']] ?? 0) + 1;
 
 $road = array_filter($shops, fn($s) => in_array($s['type'], ['road', 'spa'], true));
-$bad  = array_filter($road, fn($s) => !str_contains($s['desc'], '출장 마사지') || !str_contains($s['desc'], '홈타이'));
+$bad  = array_filter($road, function ($s) {
+    return mb_strpos($s['desc'], '출장 마사지') === false || mb_strpos($s['desc'], '홈타이') === false;
+});
 
 echo "── 생성 완료 ──\n";
 echo "시도 : " . count($sido) . " / 행정구 : " . count($gus) . " / 대표 행정동 : " . count($dongs) . "\n";

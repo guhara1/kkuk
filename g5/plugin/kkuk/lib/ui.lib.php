@@ -221,14 +221,32 @@ function kkuk_cta_tel($place = '', $line1 = '') {
         . '<span class="k-cta-tel__l2">' . kkuk_e(KKUK_TEL_FMT) . '</span></span></a>';
 }
 
+/**
+ * 업소 썸네일.
+ * 기본은 인라인 SVG(요청 1건 추가 없음).
+ * 정적 빌드처럼 kkuk_shop_img_filter() 가 정의된 환경에서는 외부 .svg 파일을 <img> 로 참조한다.
+ * 같은 썸네일이 여러 페이지에 반복되므로, 외부화하면 브라우저 캐시가 걸리고 HTML 용량이 크게 줄어든다.
+ * 썸네일에는 동 이름만 넣는다(카드 본문이 업종·지역을 이미 표기하므로 중복을 피한다).
+ */
+function kkuk_shop_thumb(array $s, $where = '') {
+    if (function_exists('kkuk_shop_img_filter')) {
+        $src = kkuk_shop_img_filter($s);
+        if ($src) {
+            return '<img src="' . kkuk_e($src) . '" width="800" height="450"'
+                 . ' loading="lazy" decoding="async"'
+                 . ' alt="' . kkuk_e($s['name'] . ' ' . $s['type_label'] . ' 이미지') . '">';
+        }
+    }
+    return kkuk_shop_svg(['name' => $s['name'], 'type' => $s['type_badge'],
+                          'where' => $where, 'seed' => $s['slug']]);
+}
+
 /** 업소 카드 */
 function kkuk_shop_card(array $s, $showArea = true) {
     $d    = kkuk_dong($s['dong']);
     $gu   = kkuk_gu($s['gu']);
     $area = $showArea ? (($gu['label'] ?? '') . ' ' . ($d['name'] ?? '')) : ($d['name'] ?? '');
-    // 썸네일에는 동 이름만 넣는다(카드 본문이 업종·지역을 이미 표기하므로 중복을 피한다)
-    $svg  = kkuk_shop_svg(['name' => $s['name'], 'type' => $s['type_badge'],
-                           'where' => $d['name'] ?? '', 'seed' => $s['slug']]);
+    $svg  = kkuk_shop_thumb($s, $d['name'] ?? '');
     $tags = '';
     foreach (array_slice($s['tags'], 0, 3) as $t) $tags .= '<span class="k-tag">' . kkuk_e($t) . '</span>';
 

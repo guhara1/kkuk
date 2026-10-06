@@ -101,6 +101,20 @@ preview/                    생성된 정적 프리뷰 (재생성 가능)
 
 ---
 
+## 정적 호스팅(Cloudflare Pages 등)에 올리려면
+
+```bash
+KKUK_BASE="https://내도메인" php tools/build_static.php     # → dist/
+```
+
+`dist/` 가 배포 대상입니다. **빌드 출력 디렉터리 = `dist`**, 빌드 명령은 비워 둡니다.
+
+> Cloudflare Pages 는 PHP 를 실행하지 않고 빌드 이미지에도 PHP 가 없습니다.
+> 따라서 빌드는 로컬에서 하고 결과물만 올려야 하며, 그누보드5의 게시판·회원·관리자 기능은 동작하지 않습니다.
+> 선택지 비교와 설정값은 [docs/05-배포-Cloudflare-Pages.md](docs/05-배포-Cloudflare-Pages.md) 참고.
+
+---
+
 ## ⚠ 공개 전에 반드시 할 일
 
 현재 업소 정보는 **전부 가상 데이터**입니다. 그래서 기본값으로 **검색엔진 색인이 막혀 있습니다.**

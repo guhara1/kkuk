@@ -86,13 +86,11 @@ function kkuk_asset_filter($file) { return 'asset/' . $file; }
 $ok = $fail = 0;
 $bytes = 0;
 foreach ($plan as [$url, $type, $key]) {
-    $html = match ($type) {
-        'home' => kkuk_page_home(),
-        'sido' => kkuk_page_sido($key),
-        'gu'   => kkuk_page_gu($key),
-        'dong' => kkuk_page_dong($key),
-        'shop' => kkuk_page_shop($key),
-    };
+    if      ($type === 'home') $html = kkuk_page_home();
+    elseif  ($type === 'sido') $html = kkuk_page_sido($key);
+    elseif  ($type === 'gu')   $html = kkuk_page_gu($key);
+    elseif  ($type === 'dong') $html = kkuk_page_dong($key);
+    else                       $html = kkuk_page_shop($key);
     if ($html === null) { $fail++; fwrite(STDERR, "  ! 렌더 실패 : {$type} {$key}\n"); continue; }
     $f = $OUT . '/' . flat($url);
     file_put_contents($f, $html);
