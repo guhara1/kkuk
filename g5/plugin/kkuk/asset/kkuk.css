@@ -260,6 +260,19 @@ button{font-family:inherit}
 .k-rate{display:inline-flex;align-items:center;gap:5px;font-size:13.5px;font-weight:800;color:var(--gold)}
 .k-rate span{color:var(--ink-3);font-weight:650}
 
+/* 카드 전체를 클릭 영역으로 (stretched link)
+   - 링크 태그는 제목 하나만 둔다. 썸네일을 별도 <a> 로 감싸면 같은 주소가 두 번 노출돼
+     접근성(중복 링크)과 SEO(링크 희석) 모두 손해다.
+   - 가상 요소를 카드 전체에 덮어 썸네일·태그·가격 어디를 눌러도 상세로 이동한다. */
+.k-shop--link{position:relative;cursor:pointer}
+.k-shop--link .k-shop__name a::after{content:"";position:absolute;inset:0;z-index:1}
+.k-shop--link .k-shop__name a:focus-visible{outline:none}
+.k-shop--link .k-shop__name a:focus-visible::after{
+  outline:3px solid var(--focus);outline-offset:-3px;border-radius:var(--r);
+}
+.k-shop--link:hover .k-shop__name{text-decoration:underline;text-underline-offset:3px}
+.k-shop--link .k-shop__name a:hover{text-decoration:none}
+
 /* ---------- 11. 본문 (고유 콘텐츠 1500자) ---------- */
 .k-article{
   background:var(--surface);border:2px solid var(--line-strong);border-radius:var(--r);

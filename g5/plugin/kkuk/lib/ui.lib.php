@@ -118,7 +118,7 @@ function kkuk_footer() {
     $sido = '';
     foreach (kkuk_sido_all() as $s) {
         $sido .= '<li><a href="' . kkuk_e(kkuk_u($s['url'])) . '">' . kkuk_e($s['name'])
-               . ' 지역 전체 (' . (int)$s['gu_count'] . '개 구)</a></li>';
+               . ' 지역 전체</a></li>';
     }
     $demo = KKUK_DEMO_DATA
         ? '<b>데이터 안내</b> · 현재 노출되는 업소 정보는 화면·구조 검증용 <b>가상 데이터</b>입니다. '
@@ -251,7 +251,7 @@ function kkuk_shop_card(array $s, $showArea = true) {
     foreach (array_slice($s['tags'], 0, 3) as $t) $tags .= '<span class="k-tag">' . kkuk_e($t) . '</span>';
 
     ob_start(); ?>
-<article class="k-card k-shop" data-shop-type="<?= kkuk_e($s['type']) ?>">
+<article class="k-card k-shop k-shop--link" data-shop-type="<?= kkuk_e($s['type']) ?>">
   <div class="k-shop__thumb">
     <?= $svg ?>
     <span class="k-shop__type"><?= kkuk_e($s['type_label']) ?></span>

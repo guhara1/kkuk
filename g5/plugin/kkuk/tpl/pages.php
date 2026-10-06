@@ -31,7 +31,7 @@ function kkuk_page_home() {
         'kicker' => '서울 · 경기 · 인천',
         'title'  => '지역별 마사지 안내',
         'sub'    => '로드샵 · 출장마사지 · 홈타이를 행정동 단위로',
-        'chips'  => ['행정구 ' . $totalGu, '행정동 ' . $totalDong, '등록 ' . $totalShop],
+        'chips'  => [],
         'note'   => '머무는 동네를 고르면 접근 동선과 코스, 요금 기준이 함께 보입니다',
     ]);
 
@@ -41,12 +41,10 @@ function kkuk_page_home() {
         $chips = [];
         foreach (array_slice($s['gu'], 0, 10) as $gk) {
             $g = kkuk_gu($gk);
-            $chips[] = [$g['label'], $g['url'], $g['shop_count']];
+            $chips[] = [$g['label'], $g['url']];
         }
         $cards .= '<article class="k-card k-card__pad k-card--stack">'
             . '<h3 class="k-h3" style="margin-bottom:6px">' . kkuk_e($s['full']) . '</h3>'
-            . '<p class="k-small" style="margin-bottom:14px">행정구 ' . (int)$s['gu_count']
-            . '곳 · 등록 ' . (int)$s['shop_count'] . '곳</p>'
             . kkuk_chips($chips, '')
             . '<p class="k-card__foot"><a class="k-btn k-btn--brand k-btn--block" href="'
             . kkuk_e(kkuk_u($s['url'])) . '">' . kkuk_e($s['name']) . ' 전체 보기</a></p>'
@@ -70,7 +68,7 @@ function kkuk_page_home() {
       <div class="k-hero__title">
         <h1 class="k-h1">서울 · 경기 · 인천 마사지, 출장마사지, 홈타이 지역 안내</h1>
         <p class="k-lead" style="margin-top:12px">
-          행정구 <?= $totalGu ?>곳과 대표 행정동 <?= $totalDong ?>곳을 기준으로 정리했습니다.
+          행정구와 대표 행정동을 기준으로 정리했습니다.
           지역을 고르면 그 동네 기준의 접근 동선, 많이 찾는 코스, 요금 비교 기준, 출장 가능 범위를 한 화면에서 확인할 수 있습니다.
         </p>
       </div>
@@ -151,8 +149,8 @@ function kkuk_page_sido($slug) {
         'seed' => 'sido:' . $slug, 'kicker' => $s['full'],
         'title' => $s['name'] . ' 마사지',
         'sub'   => '출장마사지 · 홈타이 · 로드샵',
-        'chips' => ['행정구 ' . $s['gu_count'], '행정동 ' . $dongN, '등록 ' . $s['shop_count']],
-        'note'  => '구를 고르면 대표 행정동 3곳까지 좁혀 볼 수 있습니다',
+        'chips' => [],
+        'note'  => '구를 고르면 대표 행정동까지 좁혀 볼 수 있습니다',
     ]);
 
     /* 구 카드 */
@@ -165,7 +163,7 @@ function kkuk_page_sido($slug) {
             . kkuk_e($g['label']) . '</a></h3>'
             . '<p class="k-small" style="margin:5px 0 10px">' . kkuk_e($g['blurb']) . '</p>'
             . '<p class="k-small" style="margin-bottom:10px"><b>' . kkuk_e(implode(' · ', array_slice($g['stations'], 0, 3)))
-            . '</b> · 등록 ' . (int)$g['shop_count'] . '곳</p>'
+            . '</b></p>'
             . kkuk_chips($dchips, '')
             . '</article>';
     }
@@ -189,7 +187,7 @@ function kkuk_page_sido($slug) {
     </section>
 
     <section class="k-sect">
-      <?= kkuk_shead($s['name'] . ' 행정구 ' . $s['gu_count'] . '곳', '구를 고르면 대표 행정동으로 다시 좁혀집니다') ?>
+      <?= kkuk_shead($s['name'] . ' 행정구', '구를 고르면 대표 행정동으로 다시 좁혀집니다') ?>
       <div class="k-grid k-cols-3"><?= $cards ?></div>
       <p class="k-small" style="margin-top:16px"><?= kkuk_e($intro[1] ?? '') ?></p>
     </section>
@@ -247,12 +245,12 @@ function kkuk_page_gu($key) {
         'title' => $g['name'] . ' 마사지',
         'sub'   => '출장마사지 · 홈타이 · 로드샵 안내',
         'chips' => array_slice($g['stations'], 0, 3),
-        'note'  => '등록 ' . $g['shop_count'] . '곳 · 대표 행정동 ' . $g['dong_count'] . '곳 · ' . implode(' / ', array_slice($g['lines'], 0, 2)),
+        'note'  => implode(' · ', array_slice($g['lines'], 0, 3)),
     ]);
 
     /* 동 칩 + 동 카드 */
     $dchips = [];
-    foreach ($dongs as $d) $dchips[] = [$d['name'], $d['url'], count($d['shops'])];
+    foreach ($dongs as $d) $dchips[] = [$d['name'], $d['url']];
 
     $dcards = '';
     foreach ($dongs as $d) {
@@ -262,7 +260,6 @@ function kkuk_page_gu($key) {
             . '<p class="k-small" style="margin:5px 0 9px"><span class="k-badge k-badge--brand">'
             . kkuk_e(kkuk_kind_label($d['kind'])) . '</span></p>'
             . '<p class="k-small">' . kkuk_e(implode(' · ', $d['anchors'])) . '</p>'
-            . '<p class="k-small" style="margin-top:9px">등록 <b>' . count($d['shops']) . '곳</b></p>'
             . '</article>';
     }
 
@@ -290,8 +287,7 @@ function kkuk_page_gu($key) {
       <div class="k-hero__title">
         <h1 class="k-h1"><?= kkuk_e($g['area']) ?> 마사지 · 출장마사지 · 홈타이</h1>
         <p class="k-lead" style="margin-top:12px"><?= kkuk_e($g['blurb']) ?>.
-          대표 행정동 <?= (int)$g['dong_count'] ?>곳과 등록 <?= (int)$g['shop_count'] ?>곳을
-          접근 동선·코스·요금 기준과 함께 정리했습니다.</p>
+          대표 행정동과 등록 업소를 접근 동선·코스·요금 기준과 함께 정리했습니다.</p>
       </div>
       <div class="k-hero__meta">
         <span class="k-badge k-badge--brand"><?= kkuk_icon('pin', 14) ?> <?= kkuk_e(implode(' · ', array_slice($g['stations'], 0, 3))) ?></span>
@@ -308,7 +304,7 @@ function kkuk_page_gu($key) {
     <div class="k-split k-sect">
       <div>
         <section>
-          <?= kkuk_shead($g['label'] . ' 등록 업소 ' . count($shops) . '곳', '업종으로 걸러 보실 수 있습니다') ?>
+          <?= kkuk_shead($g['label'] . ' 등록 업소', '업종으로 걸러 보실 수 있습니다') ?>
           <?= kkuk_filter_bar($shops) ?>
           <div class="k-mt"><?= kkuk_shop_grid($shops, false, 2) ?></div>
           <div class="k-empty k-mt" data-kkuk-empty hidden>해당 업종으로 등록된 업소가 없습니다.</div>
@@ -335,7 +331,6 @@ function kkuk_page_gu($key) {
               <div><dt>지역</dt><dd><?= kkuk_e($g['area']) ?></dd></div>
               <div><dt>대표역</dt><dd><?= kkuk_e(implode(', ', array_slice($g['stations'], 0, 3))) ?></dd></div>
               <div><dt>노선</dt><dd><?= kkuk_e(implode(', ', $g['lines'])) ?></dd></div>
-              <div><dt>등록</dt><dd><?= (int)$g['shop_count'] ?>곳 · 행정동 <?= (int)$g['dong_count'] ?>곳</dd></div>
               <div><dt>인접</dt><dd><?= kkuk_e(implode(', ', $g['near'])) ?></dd></div>
             </dl>
           </div>
@@ -392,7 +387,7 @@ function kkuk_page_dong($key) {
         'title' => $d['name'] . ' 마사지',
         'sub'   => '출장마사지 · 홈타이 · 로드샵',
         'chips' => array_slice($d['anchors'], 0, 3),
-        'note'  => '등록 ' . count($shops) . '곳 · ' . $d['area'],
+        'note'  => $d['area'],
     ]);
 
     $sibLinks = [];
@@ -413,8 +408,8 @@ function kkuk_page_dong($key) {
         <h1 class="k-h1"><?= kkuk_e($d['area']) ?> 마사지 · 출장마사지 · 홈타이</h1>
         <p class="k-lead" style="margin-top:12px">
           <?= kkuk_e(implode(' · ', $d['anchors'])) ?> 기준으로 정리한 <?= kkuk_e($d['name']) ?>
-          <?= kkuk_e(kkuk_kind_label($d['kind'])) ?> 생활권 안내입니다. 등록 <?= count($shops) ?>곳의
-          접근 동선과 코스, 출장 가능 범위를 함께 확인하실 수 있습니다.</p>
+          <?= kkuk_e(kkuk_kind_label($d['kind'])) ?> 생활권 안내입니다.
+          등록 업소의 접근 동선과 코스, 출장 가능 범위를 함께 확인하실 수 있습니다.</p>
       </div>
       <div class="k-hero__meta">
         <span class="k-badge k-badge--brand"><?= kkuk_icon('pin', 14) ?> <?= kkuk_e($d['anchors'][0] ?? $d['name']) ?></span>
@@ -425,7 +420,7 @@ function kkuk_page_dong($key) {
     <div class="k-split k-sect">
       <div>
         <section>
-          <?= kkuk_shead($d['name'] . ' 등록 업소 ' . count($shops) . '곳', '업종으로 걸러 보실 수 있습니다') ?>
+          <?= kkuk_shead($d['name'] . ' 등록 업소', '업종으로 걸러 보실 수 있습니다') ?>
           <?= kkuk_filter_bar($shops) ?>
           <div class="k-mt"><?= kkuk_shop_grid($shops, false, 2) ?></div>
           <div class="k-empty k-mt" data-kkuk-empty hidden>해당 업종으로 등록된 업소가 없습니다.</div>
@@ -452,7 +447,6 @@ function kkuk_page_dong($key) {
               <div><dt>지역</dt><dd><?= kkuk_e($d['area']) ?></dd></div>
               <div><dt>성격</dt><dd><?= kkuk_e(kkuk_kind_label($d['kind'])) ?></dd></div>
               <div><dt>기준점</dt><dd><?= kkuk_e(implode(', ', $d['anchors'])) ?></dd></div>
-              <div><dt>등록</dt><dd><?= count($shops) ?>곳</dd></div>
             </dl>
           </div>
         </div>
@@ -655,7 +649,7 @@ function kkuk_page_search($q) {
     <?php if ($q !== ''): ?>
     <section class="k-sect">
       <?= kkuk_shead('지역 결과 ' . count($regions) . '건') ?>
-      <?= $regions ? kkuk_links_block('일치하는 지역', array_map(fn($r) => [$r[0] . ' (' . $r[2] . ')', $r[1]], $regions))
+      <?= $regions ? kkuk_links_block('일치하는 지역', array_map(fn($r) => [$r[0], $r[1]], $regions))
                    : '<div class="k-empty">일치하는 지역이 없습니다. 구 또는 동 이름으로 다시 검색해 보세요.</div>' ?>
     </section>
     <section class="k-sect">

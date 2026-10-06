@@ -155,7 +155,7 @@ $searchJs = <<<'JS'
     h += '<div class="k-shead"><span class="k-shead__bar"></span><h2 class="k-h2">지역 결과 '+hitR.length+'건</h2></div>';
     if(hitR.length){
       h += '<div class="k-links"><div class="k-links__list">';
-      hitR.forEach(function(x){ h += '<a href="'+x[1]+'">'+x[0]+' ('+x[2]+')</a>'; });
+      hitR.forEach(function(x){ h += '<a href="'+x[1]+'">'+x[0]+'</a>'; });
       h += '</div></div>';
     } else { h += '<div class="k-empty">일치하는 지역이 없습니다.</div>'; }
     h += '<div class="k-shead" style="margin-top:34px"><span class="k-shead__bar"></span><h2 class="k-h2">업소 결과 '+hitS.length+'건</h2></div>';

@@ -111,7 +111,10 @@ function kkuk_hero_deco($v, $p, $uid) {
 /**
  * 히어로박스 SVG
  *
- * @param array $o kicker, title, sub, chips(배열), note, seed, ratio('wide'|'tall')
+ * ※ preserveAspectRatio="xMidYMid slice" 로 렌더되므로 넓은 화면에서는
+ *   위아래가 각각 최대 38 유닛 가량 잘린다. 모든 텍스트는 y 60~380 안에 둔다.
+ *
+ * @param array $o kicker, title, sub, chips(배열), note, seed
  */
 function kkuk_hero_svg(array $o) {
     $seed   = $o['seed'] ?? ($o['title'] ?? 'kkuk');
@@ -141,9 +144,9 @@ function kkuk_hero_svg(array $o) {
         $w = $ws[$i];
         $chipSvg .= '
       <g>
-        <rect x="'.round($cx,1).'" y="302" width="'.round($w,1).'" height="'.$ch.'" rx="25"
+        <rect x="'.round($cx,1).'" y="296" width="'.round($w,1).'" height="'.$ch.'" rx="25"
               fill="'.$p['bg'].'" fill-opacity=".42" stroke="'.$p['c'].'" stroke-opacity=".5" stroke-width="2"/>
-        <text x="'.round($cx + $w/2,1).'" y="335" text-anchor="middle" font-size="'.$cfs.'"
+        <text x="'.round($cx + $w/2,1).'" y="329" text-anchor="middle" font-size="'.$cfs.'"
               font-weight="700" fill="'.$p['c'].'">'.kkuk_e($c).'</text>
       </g>';
         $cx += $w + $cgap;
@@ -190,7 +193,7 @@ function kkuk_hero_svg(array $o) {
     <text class="k-hs-s" x="600" y="271" font-size="31" fill="'.$p['c'].'" fill-opacity=".94">'.kkuk_e($sub).'</text>
   </g>
   '.$chipSvg.'
-  <text class="k-hs-n" x="600" y="391" text-anchor="middle" font-size="20"
+  <text class="k-hs-n" x="600" y="'.($chips ? 372 : 330).'" text-anchor="middle" font-size="20"
         fill="'.$p['c'].'" fill-opacity=".66">'.kkuk_e($note).'</text>
 </svg>');
 }
